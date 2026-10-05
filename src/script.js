@@ -1,719 +1,837 @@
-/* ================= AUTHENTICATION ================= */
-
-function showSignup() {
-
-    document
-        .getElementById("loginForm")
-        .classList.add("hidden");
-
-    document
-        .getElementById("signupForm")
-        .classList.remove("hidden");
-
-}
-
-
-function showLogin() {
-
-    document
-        .getElementById("signupForm")
-        .classList.add("hidden");
-
-    document
-        .getElementById("loginForm")
-        .classList.remove("hidden");
-
-}
-
-
-/* DEMO LOGIN */
-
-function demoLogin() {
-
-    const email =
-        document
-            .getElementById("loginEmail")
-            .value
-            .trim();
-
-    const password =
-        document
-            .getElementById("loginPassword")
-            .value;
-
-
-    if (email === "" || password === "") {
-
-        alert(
-            "Please enter your email and password."
-        );
-
-        return;
-
-    }
-
-
-    document
-        .getElementById("authPage")
-        .classList.add("hidden");
-
-    document
-        .getElementById("mainApp")
-        .classList.remove("hidden");
-
-}
-
-
-/* DEMO SIGN UP */
-
-function demoSignup() {
-
-    const name =
-        document
-            .getElementById("signupName")
-            .value
-            .trim();
-
-    const email =
-        document
-            .getElementById("signupEmail")
-            .value
-            .trim();
-
-    const password =
-        document
-            .getElementById("signupPassword")
-            .value;
-
-    const confirmPassword =
-        document
-            .getElementById("confirmPassword")
-            .value;
-
-
-    if (
-        name === "" ||
-        email === "" ||
-        password === "" ||
-        confirmPassword === ""
-    ) {
-
-        alert(
-            "Please fill in all fields."
-        );
-
-        return;
-
-    }
-
-
-    if (password !== confirmPassword) {
-
-        alert(
-            "Passwords do not match."
-        );
-
-        return;
-
-    }
-
-
-    if (password.length < 6) {
-
-        alert(
-            "Password should contain at least 6 characters."
-        );
-
-        return;
-
-    }
-
-
-    alert(
-        "Account created successfully! You can now continue to FinTrack."
-    );
-
-
-    showLogin();
-
-}
-
-
-/* SHOW / HIDE PASSWORD */
-
-function togglePassword(
-    inputId,
-    button
-) {
-
-    const input =
-        document.getElementById(inputId);
-
-
-    if (input.type === "password") {
-
-        input.type = "text";
-
-        button.textContent = "🙈";
-
-    }
-
-    else {
-
-        input.type = "password";
-
-        button.textContent = "👁️";
-
-    }
-
-}
-
-
-/* LOGOUT */
-
-function logout() {
-
-    document
-        .getElementById("mainApp")
-        .classList.add("hidden");
-
-    document
-        .getElementById("authPage")
-        .classList.remove("hidden");
-
-}
-
-
-/* ================= FINTRACK ================= */
+// ==========================================
+// FINTRACK - FRONTEND + BACKEND
+// ==========================================
+
+const API_BASE_URL = "http://192.168.0.56:5000";
+
+// ==========================================
+// FINANCIAL DATA
+// ==========================================
 
 let totalIncome = 0;
-
 let totalExpenses = 0;
 
-
 const budgets = {
-
     Food: 2000,
-
     Transport: 1500,
-
     Shopping: 3000,
-
     Bills: 2500,
-
     Other: 2000
-
 };
-
 
 const categoryExpenses = {
-
     Food: 0,
-
     Transport: 0,
-
     Shopping: 0,
-
     Bills: 0,
-
     Other: 0
-
 };
-
 
 const expenseHistory = [];
 
+// ==========================================
+// GET AUTH TOKEN
+// ==========================================
 
-/* START TRACKING */
-
-function startTracking() {
-
-    document
-        .getElementById("dashboard")
-        .scrollIntoView({
-            behavior: "smooth"
-        });
-
+function getToken() {
+    return localStorage.getItem("fintrackToken");
 }
 
+// ==========================================
+// SHOW LOGIN
+// ==========================================
 
-/* ADD INCOME */
+function showLogin() {
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
 
-function addIncome() {
-
-    const input =
-        document.getElementById("incomeAmount");
-
-    const amount =
-        Number(input.value);
-
-
-    if (amount <= 0) {
-
-        alert(
-            "Please enter a valid income amount."
-        );
-
-        return;
-
+    if (loginForm) {
+        loginForm.classList.remove("hidden");
     }
 
-
-    totalIncome += amount;
-
-
-    input.value = "";
-
-
-    updateDashboard();
-
-    updateFinancialWarnings();
-
+    if (signupForm) {
+        signupForm.classList.add("hidden");
+    }
 }
 
+// ==========================================
+// SHOW SIGNUP
+// ==========================================
 
-/* ADD EXPENSE */
+function showSignup() {
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
 
-function addExpense() {
+    if (loginForm) {
+        loginForm.classList.add("hidden");
+    }
 
-    const amountInput =
-        document.getElementById(
-            "expenseAmount"
+    if (signupForm) {
+        signupForm.classList.remove("hidden");
+    }
+}
+
+// ==========================================
+// LOGIN
+// ==========================================
+
+async function demoLogin() {
+    const emailElement =
+        document.getElementById("loginEmail");
+
+    const passwordElement =
+        document.getElementById("loginPassword");
+
+    const email = emailElement.value.trim();
+    const password = passwordElement.value;
+
+    if (!email || !password) {
+        alert("Please enter your email and password.");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/auth/login`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            }
         );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || "Invalid username or password.");
+            return;
+        }
+
+        // Save authentication details
+        localStorage.setItem(
+            "fintrackToken",
+            data.token
+        );
+
+        localStorage.setItem(
+            "fintrackUserId",
+            data.userId
+        );
+
+        localStorage.setItem(
+            "fintrackUserName",
+            data.name
+        );
+
+        // Show application
+        document
+            .getElementById("authPage")
+            .classList.add("hidden");
+
+        document
+            .getElementById("mainApp")
+            .classList.remove("hidden");
+
+        const welcomeText =
+            document.getElementById("welcomeText");
+
+        if (welcomeText) {
+            welcomeText.textContent =
+                `Welcome back, ${data.name}!`;
+        }
+
+        alert("Login successful!");
+
+        // Load user's saved data from MySQL
+        await loadFinancialData();
+
+    } catch (error) {
+        console.error("Login error:", error);
+
+        alert(
+            "Cannot connect to the FinTrack server.\n\n" +
+            "Please make sure your friend's backend is running."
+        );
+    }
+}
+
+// ==========================================
+// SIGN UP
+// ==========================================
+
+async function demoSignup() {
+    const nameElement =
+        document.getElementById("signupName");
+
+    const emailElement =
+        document.getElementById("signupEmail");
+
+    const passwordElement =
+        document.getElementById("signupPassword");
+
+    const confirmPasswordElement =
+        document.getElementById("confirmPassword");
+
+    const name = nameElement.value.trim();
+    const email = emailElement.value.trim();
+    const password = passwordElement.value;
+    const confirmPassword =
+        confirmPasswordElement.value;
+
+    if (!name || !email || !password || !confirmPassword) {
+        alert("Please fill in all fields.");
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+    }
+
+    if (password.length < 6) {
+        alert("Password must contain at least 6 characters.");
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/auth/register`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: password
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(data.message || "Registration failed.");
+            return;
+        }
+
+        alert(
+            "Account created successfully!\n\n" +
+            "Please login with your email and password."
+        );
+
+        nameElement.value = "";
+        emailElement.value = "";
+        passwordElement.value = "";
+        confirmPasswordElement.value = "";
+
+        showLogin();
+
+    } catch (error) {
+        console.error("Signup error:", error);
+
+        alert(
+            "Cannot connect to the FinTrack server."
+        );
+    }
+}
+
+// ==========================================
+// PASSWORD SHOW / HIDE
+// ==========================================
+
+function togglePassword(inputId, button) {
+    const input =
+        document.getElementById(inputId);
+
+    if (input.type === "password") {
+        input.type = "text";
+        button.textContent = "🙈";
+    } else {
+        input.type = "password";
+        button.textContent = "👁️";
+    }
+}
+
+// ==========================================
+// LOGOUT
+// ==========================================
+
+function logout() {
+    localStorage.removeItem("fintrackToken");
+    localStorage.removeItem("fintrackUserId");
+    localStorage.removeItem("fintrackUserName");
+
+    totalIncome = 0;
+    totalExpenses = 0;
+
+    Object.keys(categoryExpenses).forEach(
+        function(category) {
+            categoryExpenses[category] = 0;
+        }
+    );
+
+    expenseHistory.length = 0;
+
+    document
+        .getElementById("mainApp")
+        .classList.add("hidden");
+
+    document
+        .getElementById("authPage")
+        .classList.remove("hidden");
+
+    showLogin();
+}
+
+// ==========================================
+// LOAD ALL FINANCIAL DATA FROM BACKEND
+// ==========================================
+
+async function loadFinancialData() {
+    const token = getToken();
+
+    if (!token) {
+        return;
+    }
+
+    try {
+        const headers = {
+            "Authorization": `Bearer ${token}`
+        };
+
+        // Get income
+        const incomeResponse = await fetch(
+            `${API_BASE_URL}/api/income`,
+            {
+                method: "GET",
+                headers: headers
+            }
+        );
+
+        if (incomeResponse.ok) {
+            const incomeData =
+                await incomeResponse.json();
+
+            totalIncome = 0;
+
+            incomeData.income.forEach(
+                function(item) {
+                    totalIncome += Number(item.amount);
+                }
+            );
+        }
+
+        // Get expenses
+        const expenseResponse = await fetch(
+            `${API_BASE_URL}/api/expenses`,
+            {
+                method: "GET",
+                headers: headers
+            }
+        );
+
+        if (expenseResponse.ok) {
+            const expenseData =
+                await expenseResponse.json();
+
+            totalExpenses = 0;
+
+            Object.keys(categoryExpenses).forEach(
+                function(category) {
+                    categoryExpenses[category] = 0;
+                }
+            );
+
+            expenseHistory.length = 0;
+
+            expenseData.expenses.forEach(
+                function(item) {
+
+                    const amount = Number(item.amount);
+
+                    totalExpenses += amount;
+
+                    const category =
+                        item.category || "Other";
+
+                    if (
+                        Object.prototype.hasOwnProperty.call(
+                            categoryExpenses,
+                            category
+                        )
+                    ) {
+                        categoryExpenses[category] += amount;
+                    } else {
+                        categoryExpenses.Other += amount;
+                    }
+
+                    expenseHistory.push({
+                        name: item.name,
+                        category: category,
+                        amount: amount,
+                        date: item.date
+                    });
+                }
+            );
+        }
+
+        updateDashboard();
+        updateBudget();
+        updateExpenseChart();
+        updateRecentExpenses();
+        updateFinancialWarnings();
+
+    } catch (error) {
+        console.error(
+            "Error loading financial data:",
+            error
+        );
+    }
+}
+
+// ==========================================
+// ADD INCOME - BACKEND
+// ==========================================
+
+async function addIncome() {
+    const incomeInput =
+        document.getElementById("incomeAmount");
+
+    if (!incomeInput) {
+        return;
+    }
+
+    const amount = Number(incomeInput.value);
+
+    if (!amount || amount <= 0) {
+        alert("Please enter a valid income amount.");
+        return;
+    }
+
+    const token = getToken();
+
+    if (!token) {
+        alert("Please login first.");
+        return;
+    }
+
+    // Today's date
+    const today =
+        new Date().toISOString().split("T")[0];
+
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/income`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    source: "Income",
+                    amount: amount,
+                    date: today
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert(
+                data.message ||
+                "Failed to add income."
+            );
+            return;
+        }
+
+        incomeInput.value = "";
+
+        // Reload data from MySQL
+        await loadFinancialData();
+
+        alert(
+            `₹${amount.toLocaleString("en-IN")} income added successfully.`
+        );
+
+    } catch (error) {
+        console.error(
+            "Add income error:",
+            error
+        );
+
+        alert(
+            "Could not connect to the backend."
+        );
+    }
+}
+
+// ==========================================
+// ADD EXPENSE - BACKEND
+// ==========================================
+
+async function addExpense() {
+    const expenseInput =
+        document.getElementById("expenseAmount");
 
     const categoryInput =
-        document.getElementById(
-            "expenseCategory"
-        );
+        document.getElementById("expenseCategory");
 
+    if (!expenseInput || !categoryInput) {
+        return;
+    }
 
     const amount =
-        Number(amountInput.value);
+        Number(expenseInput.value);
 
     const category =
         categoryInput.value;
 
-
-    if (amount <= 0) {
-
-        alert(
-            "Please enter a valid expense amount."
-        );
-
+    if (!amount || amount <= 0) {
+        alert("Please enter a valid expense amount.");
         return;
-
     }
 
+    if (!category) {
+        alert("Please select an expense category.");
+        return;
+    }
 
-    totalExpenses += amount;
+    const token = getToken();
 
+    if (!token) {
+        alert("Please login first.");
+        return;
+    }
 
-    categoryExpenses[category] += amount;
+    const today =
+        new Date().toISOString().split("T")[0];
 
+    try {
+        const response = await fetch(
+            `${API_BASE_URL}/api/expenses`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    name: category,
+                    amount: amount,
+                    category: category,
+                    date: today
+                })
+            }
+        );
 
-    expenseHistory.push({
+        const data = await response.json();
 
-        amount: amount,
+        if (!response.ok) {
+            alert(
+                data.message ||
+                "Failed to add expense."
+            );
+            return;
+        }
 
-        category: category,
+        expenseInput.value = "";
 
-        date: new Date()
-            .toLocaleDateString()
+        await loadFinancialData();
 
-    });
+        alert(
+            `₹${amount.toLocaleString("en-IN")} expense added successfully.`
+        );
 
+    } catch (error) {
+        console.error(
+            "Add expense error:",
+            error
+        );
 
-    amountInput.value = "";
-
-
-    updateDashboard();
-
-    updateBudget();
-
-    updateExpenseChart();
-
-    updateRecentExpenses();
-
-    updateFinancialWarnings();
-
+        alert(
+            "Could not connect to the backend."
+        );
+    }
 }
 
-
-/* DASHBOARD */
+// ==========================================
+// UPDATE DASHBOARD
+// ==========================================
 
 function updateDashboard() {
+    const incomeElement =
+        document.getElementById("totalIncome");
 
-    document
-        .getElementById("totalIncome")
-        .textContent =
-        "₹" +
-        totalIncome.toLocaleString("en-IN");
+    const expensesElement =
+        document.getElementById("totalExpenses");
 
+    const balanceElement =
+        document.getElementById("balance");
 
-    document
-        .getElementById("totalExpenses")
-        .textContent =
-        "₹" +
-        totalExpenses.toLocaleString("en-IN");
+    if (incomeElement) {
+        incomeElement.textContent =
+            `₹${totalIncome.toLocaleString("en-IN")}`;
+    }
 
+    if (expensesElement) {
+        expensesElement.textContent =
+            `₹${totalExpenses.toLocaleString("en-IN")}`;
+    }
 
     const balance =
         totalIncome - totalExpenses;
 
-
-    document
-        .getElementById("balance")
-        .textContent =
-        "₹" +
-        balance.toLocaleString("en-IN");
-
+    if (balanceElement) {
+        balanceElement.textContent =
+            `₹${balance.toLocaleString("en-IN")}`;
+    }
 }
 
-
-/* BUDGET */
+// ==========================================
+// UPDATE BUDGET
+// ==========================================
 
 function updateBudget() {
+    const budgetContainer =
+        document.getElementById("budgetContainer");
 
-    updateSingleBudget(
-        "Food",
-        "foodBudgetText",
-        "foodProgress"
-    );
-
-
-    updateSingleBudget(
-        "Transport",
-        "transportBudgetText",
-        "transportProgress"
-    );
-
-
-    updateSingleBudget(
-        "Shopping",
-        "shoppingBudgetText",
-        "shoppingProgress"
-    );
-
-
-    updateSingleBudget(
-        "Bills",
-        "billsBudgetText",
-        "billsProgress"
-    );
-
-
-    updateSingleBudget(
-        "Other",
-        "otherBudgetText",
-        "otherProgress"
-    );
-
-}
-
-
-function updateSingleBudget(
-    category,
-    textId,
-    progressId
-) {
-
-    const spent =
-        categoryExpenses[category];
-
-    const budget =
-        budgets[category];
-
-
-    const percentage =
-        Math.min(
-            (spent / budget) * 100,
-            100
-        );
-
-
-    document
-        .getElementById(textId)
-        .textContent =
-        "₹" +
-        spent.toLocaleString("en-IN") +
-        " / ₹" +
-        budget.toLocaleString("en-IN");
-
-
-    const progress =
-        document.getElementById(
-            progressId
-        );
-
-
-    progress.style.width =
-        percentage + "%";
-
-
-    if (spent > budget) {
-
-        progress.style.background =
-            "red";
-
+    if (!budgetContainer) {
+        return;
     }
 
-    else if (spent >= budget * 0.8) {
+    budgetContainer.innerHTML = "";
 
-        progress.style.background =
-            "#f0a500";
-
-    }
-
-    else {
-
-        progress.style.background =
-            "#1f4e79";
-
-    }
-
-}
-
-
-/* EXPENSE BREAKDOWN */
-
-function updateExpenseChart() {
-
-    const categories = [
-
-        "Food",
-
-        "Transport",
-
-        "Shopping",
-
-        "Bills",
-
-        "Other"
-
-    ];
-
-
-    let maxExpense = 0;
-
-
-    categories.forEach(
+    Object.keys(budgets).forEach(
         function(category) {
 
-            if (
-                categoryExpenses[category]
-                > maxExpense
-            ) {
+            const budget =
+                budgets[category];
 
-                maxExpense =
-                    categoryExpenses[category];
+            const spent =
+                categoryExpenses[category];
 
-            }
+            const percentage =
+                budget > 0
+                    ? Math.min(
+                        (spent / budget) * 100,
+                        100
+                    )
+                    : 0;
 
+            const budgetItem =
+                document.createElement("div");
+
+            budgetItem.className =
+                "budget-item";
+
+            budgetItem.innerHTML = `
+                <div class="budget-header">
+                    <span>${category}</span>
+
+                    <span>
+                        ₹${spent.toLocaleString("en-IN")}
+                        /
+                        ₹${budget.toLocaleString("en-IN")}
+                    </span>
+                </div>
+
+                <div class="budget-bar">
+                    <div
+                        class="budget-progress"
+                        style="width: ${percentage}%"
+                    ></div>
+                </div>
+            `;
+
+            budgetContainer.appendChild(
+                budgetItem
+            );
         }
     );
+}
 
+// ==========================================
+// EXPENSE BREAKDOWN
+// ==========================================
 
-    categories.forEach(
+function updateExpenseChart() {
+    const chartContainer =
+        document.getElementById("expenseChart");
+
+    if (!chartContainer) {
+        return;
+    }
+
+    chartContainer.innerHTML = "";
+
+    Object.keys(categoryExpenses).forEach(
         function(category) {
 
             const amount =
                 categoryExpenses[category];
 
+            if (amount === 0) {
+                return;
+            }
 
             const percentage =
-                maxExpense === 0
-                    ? 0
-                    : (
-                        amount /
-                        maxExpense
-                    ) * 100;
+                totalExpenses > 0
+                    ? (amount / totalExpenses) * 100
+                    : 0;
 
+            const chartItem =
+                document.createElement("div");
 
-            const id =
-                category.toLowerCase()
-                + "Chart";
+            chartItem.className =
+                "chart-item";
 
+            chartItem.innerHTML = `
+                <div class="chart-label">
+                    <span>${category}</span>
 
-            const expenseId =
-                category.toLowerCase()
-                + "Expense";
+                    <span>
+                        ₹${amount.toLocaleString("en-IN")}
+                    </span>
+                </div>
 
+                <div class="chart-bar">
+                    <div
+                        class="chart-progress"
+                        style="width: ${percentage}%"
+                    ></div>
+                </div>
+            `;
 
-            document
-                .getElementById(id)
-                .style.width =
-                percentage + "%";
-
-
-            document
-                .getElementById(expenseId)
-                .textContent =
-                "₹" +
-                amount.toLocaleString("en-IN");
-
+            chartContainer.appendChild(
+                chartItem
+            );
         }
     );
 
+    if (totalExpenses === 0) {
+        chartContainer.innerHTML =
+            "<p>No expenses added yet.</p>";
+    }
 }
 
-
-/* RECENT EXPENSES */
+// ==========================================
+// RECENT EXPENSES
+// ==========================================
 
 function updateRecentExpenses() {
+    const recentExpenses =
+        document.getElementById("recentExpenses");
 
-    const container =
-        document.getElementById(
-            "recentExpenses"
-        );
-
-
-    if (
-        expenseHistory.length === 0
-    ) {
-
-        container.innerHTML = `
-
-            <p class="empty-message">
-                No expenses added yet.
-            </p>
-
-        `;
-
+    if (!recentExpenses) {
         return;
-
     }
 
+    recentExpenses.innerHTML = "";
+
+    if (expenseHistory.length === 0) {
+        recentExpenses.innerHTML =
+            "<p>No expenses recorded yet.</p>";
+
+        return;
+    }
 
     const recent =
         expenseHistory
             .slice(-5)
             .reverse();
 
-
-    container.innerHTML = "";
-
-
     recent.forEach(
         function(expense) {
 
-            const row =
-                document.createElement(
-                    "div"
-                );
+            const item =
+                document.createElement("div");
 
+            item.className =
+                "recent-expense";
 
-            row.className =
-                "expense-row";
-
-
-            row.innerHTML = `
-
-                <span>
-
+            item.innerHTML = `
+                <div>
                     <strong>
                         ${expense.category}
                     </strong>
 
-                    <br>
-
-                    ${expense.date}
-
-                </span>
-
+                    <small>
+                        ${expense.date}
+                    </small>
+                </div>
 
                 <strong>
-
-                    ₹${expense.amount
-                        .toLocaleString("en-IN")}
-
+                    ₹${expense.amount.toLocaleString("en-IN")}
                 </strong>
-
             `;
 
-
-            container.appendChild(row);
-
+            recentExpenses.appendChild(item);
         }
     );
-
 }
 
-
-/* SMART WARNINGS */
+// ==========================================
+// FINANCIAL WARNINGS
+// ==========================================
 
 function updateFinancialWarnings() {
-
-    const container =
+    const warningContainer =
         document.getElementById(
             "financialWarnings"
         );
 
+    if (!warningContainer) {
+        return;
+    }
 
-    const warnings = [];
+    warningContainer.innerHTML = "";
 
+    const balance =
+        totalIncome - totalExpenses;
 
     if (
         totalIncome === 0 &&
         totalExpenses === 0
     ) {
+        warningContainer.innerHTML = `
+            <div class="warning-card">
+                💡 Start by adding your income and expenses.
+            </div>
+        `;
 
-        warnings.push({
-
-            type: "success",
-
-            title:
-                "💚 You're doing well!",
-
-            message:
-                "Add your income and expenses to receive personalized financial warnings."
-
-        });
-
+        return;
     }
 
-
-    if (
-        totalExpenses > totalIncome &&
-        totalExpenses > 0
-    ) {
-
-        warnings.push({
-
-            type: "danger",
-
-            title:
-                "🚨 Spending Alert",
-
-            message:
-                "Your expenses are currently higher than your income. Try reducing non-essential spending."
-
-        });
-
+    if (totalExpenses > totalIncome) {
+        warningContainer.innerHTML += `
+            <div class="warning-card danger">
+                🚨 <strong>High Spending Alert:</strong>
+                Your expenses are greater than your income.
+            </div>
+        `;
     }
-
 
     if (
         totalIncome > 0 &&
-        totalExpenses > 0 &&
-        totalExpenses >=
-        totalIncome * 0.8 &&
+        totalExpenses >= totalIncome * 0.8 &&
         totalExpenses <= totalIncome
     ) {
-
-        warnings.push({
-
-            type: "warning-box",
-
-            title:
-                "⚠️ High Spending",
-
-            message:
-                "You have already used more than 80% of your income. Be careful with additional spending."
-
-        });
-
+        warningContainer.innerHTML += `
+            <div class="warning-card warning">
+                ⚠️ <strong>Spending Alert:</strong>
+                You have used more than 80% of your income.
+            </div>
+        `;
     }
-
 
     Object.keys(budgets).forEach(
         function(category) {
@@ -724,416 +842,314 @@ function updateFinancialWarnings() {
             const budget =
                 budgets[category];
 
+            if (spent >= budget) {
+                warningContainer.innerHTML += `
+                    <div class="warning-card danger">
+                        🚨 <strong>
+                        ${category} Budget Alert:
+                        </strong>
 
-            if (spent > budget) {
-
-                warnings.push({
-
-                    type: "danger",
-
-                    title:
-                        "🚨 " +
-                        category +
-                        " Budget Exceeded",
-
-                    message:
-                        "You have exceeded your " +
-                        category +
-                        " budget by ₹" +
-                        (
-                            spent - budget
-                        ).toLocaleString("en-IN") +
-                        "."
-
-                });
-
+                        You have reached or exceeded
+                        your ${category} budget of
+                        ₹${budget.toLocaleString("en-IN")}.
+                    </div>
+                `;
             }
-
-            else if (
-                spent >= budget * 0.8 &&
-                spent > 0
-            ) {
-
-                warnings.push({
-
-                    type: "warning-box",
-
-                    title:
-                        "⚠️ " +
-                        category +
-                        " Budget Alert",
-
-                    message:
-                        "You have used " +
-                        Math.round(
-                            (spent / budget) * 100
-                        ) +
-                        "% of your " +
-                        category +
-                        " budget."
-
-                });
-
-            }
-
         }
     );
-
 
     if (
         totalIncome > 0 &&
-        totalExpenses > 0 &&
-        totalExpenses <
-        totalIncome * 0.5
+        totalExpenses < totalIncome * 0.5
     ) {
-
-        warnings.push({
-
-            type: "success",
-
-            title:
-                "💰 Good Savings",
-
-            message:
-                "Your current expenses are less than 50% of your income."
-
-        });
-
+        warningContainer.innerHTML += `
+            <div class="warning-card success">
+                🎉 <strong>Good Savings!</strong>
+                You are spending less than 50%
+                of your income.
+            </div>
+        `;
     }
 
-
-    if (
-        totalIncome > totalExpenses &&
-        totalIncome > 0
-    ) {
-
-        const remaining =
-            totalIncome -
-            totalExpenses;
-
-
-        warnings.push({
-
-            type: "info",
-
-            title:
-                "💡 Available Balance",
-
-            message:
-                "You currently have ₹" +
-                remaining.toLocaleString("en-IN") +
-                " remaining after your recorded expenses."
-
-        });
-
-    }
-
-
-    container.innerHTML = "";
-
-
-    warnings.forEach(
-        function(warning) {
-
-            const div =
-                document.createElement(
-                    "div"
-                );
-
-
-            div.className =
-                "warning " +
-                warning.type;
-
-
-            div.innerHTML = `
-
+    if (balance >= 0) {
+        warningContainer.innerHTML += `
+            <div class="warning-card">
+                💰 Available Balance:
                 <strong>
-                    ${warning.title}
+                    ₹${balance.toLocaleString("en-IN")}
                 </strong>
-
-                <p>
-                    ${warning.message}
-                </p>
-
-            `;
-
-
-            container.appendChild(div);
-
-        }
-    );
-
+            </div>
+        `;
+    }
 }
 
-
-/* ================= AI ================= */
+// ==========================================
+// AI QUICK QUESTIONS
+// ==========================================
 
 function useQuestion(question) {
+    const aiInput =
+        document.getElementById("aiQuestion");
 
-    document
-        .getElementById("aiQuestion")
-        .value = question;
+    if (!aiInput) {
+        return;
+    }
 
+    aiInput.value = question;
 
     askAI();
-
 }
 
+// ==========================================
+// AI ASSISTANT
+// ==========================================
 
 function askAI() {
+    const aiInput =
+        document.getElementById("aiQuestion");
 
-    const input =
-        document.getElementById(
-            "aiQuestion"
-        );
+    const aiResponse =
+        document.getElementById("aiResponse");
 
-
-    const response =
-        document.getElementById(
-            "aiResponse"
-        );
-
+    if (!aiInput || !aiResponse) {
+        return;
+    }
 
     const question =
-        input.value
-            .trim()
-            .toLowerCase();
+        aiInput.value.trim().toLowerCase();
 
-
-    if (question === "") {
-
-        response.innerHTML = `
-
-            <strong>
-                AI Assistant:
-            </strong>
-
-            <p>
-                Please enter a question first.
-            </p>
-
-        `;
-
+    if (!question) {
+        alert("Please enter a question.");
         return;
-
     }
 
+    let answer = "";
 
     if (
-        question.includes("save") ||
-        question.includes("saving")
+        question.includes("saving") ||
+        question.includes("save")
     ) {
+        answer = `
+            💡 <strong>How to save more money:</strong>
+            <br><br>
 
-        response.innerHTML = `
+            Try the 50-30-20 rule:
+            <br>
+            • 50% for needs
+            <br>
+            • 30% for wants
+            <br>
+            • 20% for savings
+            <br><br>
 
-            <strong>
-                AI Assistant:
-            </strong>
-
-            <p>
-                A simple strategy is the 50-30-20 rule:
-                use around 50% for needs, 30% for wants,
-                and try to save 20% of your income.
-            </p>
-
-            <p>
-                Focus on reducing unnecessary spending
-                in your highest-spending category.
-            </p>
-
+            Track your daily expenses and reduce
+            unnecessary spending.
         `;
-
-        return;
-
     }
 
-
-    if (
+    else if (
         question.includes("most") ||
-        question.includes("spending")
+        question.includes("highest") ||
+        question.includes("where")
     ) {
-
-        let highestCategory = "";
-
+        let highestCategory = "None";
         let highestAmount = 0;
 
+        Object.keys(categoryExpenses).forEach(
+            function(category) {
 
-        Object.keys(categoryExpenses)
-            .forEach(
-                function(category) {
+                if (
+                    categoryExpenses[category] >
+                    highestAmount
+                ) {
+                    highestAmount =
+                        categoryExpenses[category];
 
-                    if (
-                        categoryExpenses[category]
-                        > highestAmount
-                    ) {
-
-                        highestAmount =
-                            categoryExpenses[
-                                category
-                            ];
-
-                        highestCategory =
-                            category;
-
-                    }
-
+                    highestCategory =
+                        category;
                 }
-            );
-
+            }
+        );
 
         if (highestAmount === 0) {
+            answer =
+                "You haven't added any expenses yet.";
+        } else {
+            answer = `
+                📊 You are spending the most on
+                <strong>${highestCategory}</strong>.
 
-            response.innerHTML = `
+                <br><br>
 
+                Amount spent:
                 <strong>
-                    AI Assistant:
+                    ₹${highestAmount.toLocaleString("en-IN")}
                 </strong>
-
-                <p>
-                    You haven't added any expenses yet.
-                </p>
-
             `;
-
-            return;
-
         }
-
-
-        response.innerHTML = `
-
-            <strong>
-                AI Assistant:
-            </strong>
-
-            <p>
-                Your highest spending category is
-                <strong>
-                    ${highestCategory}
-                </strong>
-                with ₹${highestAmount
-                    .toLocaleString("en-IN")}.
-            </p>
-
-            <p>
-                Consider checking whether you can
-                reduce unnecessary spending in this category.
-            </p>
-
-        `;
-
-        return;
-
     }
 
-
-    if (
+    else if (
         question.includes("budget") ||
         question.includes("within")
     ) {
-
         const balance =
-            totalIncome -
-            totalExpenses;
+            totalIncome - totalExpenses;
 
+        answer = `
+            📋 <strong>Your current financial status:</strong>
 
-        response.innerHTML = `
+            <br><br>
 
-            <strong>
-                AI Assistant:
-            </strong>
+            Total Income:
+            ₹${totalIncome.toLocaleString("en-IN")}
 
-            <p>
-                Your total recorded expenses are
-                <strong>
-                    ₹${totalExpenses
-                        .toLocaleString("en-IN")}
-                </strong>.
-            </p>
+            <br>
 
-            <p>
-                Your current balance is
-                <strong>
-                    ₹${balance
-                        .toLocaleString("en-IN")}
-                </strong>.
-            </p>
+            Total Expenses:
+            ₹${totalExpenses.toLocaleString("en-IN")}
 
+            <br>
+
+            Remaining Balance:
+            ₹${balance.toLocaleString("en-IN")}
+
+            <br><br>
+
+            Keep your expenses below your income
+            to maintain a healthy budget.
         `;
-
-        return;
-
     }
 
-
-    if (
+    else if (
         question.includes("expense") ||
-        question.includes("expenses")
+        question.includes("expenses") ||
+        question.includes("spending")
     ) {
-
-        response.innerHTML = `
+        answer = `
+            💰 Your total expenses are:
 
             <strong>
-                AI Assistant:
+                ₹${totalExpenses.toLocaleString("en-IN")}
             </strong>
-
-            <p>
-                Your total recorded expenses are
-                <strong>
-                    ₹${totalExpenses
-                        .toLocaleString("en-IN")}
-                </strong>.
-            </p>
-
         `;
-
-        return;
-
     }
 
+    else if (
+        question.includes("income") ||
+        question.includes("salary")
+    ) {
+        answer = `
+            💵 Your total income is:
 
-    response.innerHTML = `
+            <strong>
+                ₹${totalIncome.toLocaleString("en-IN")}
+            </strong>
+        `;
+    }
 
-        <strong>
-            AI Assistant:
-        </strong>
+    else if (
+        question.includes("balance") ||
+        question.includes("left") ||
+        question.includes("remaining")
+    ) {
+        const balance =
+            totalIncome - totalExpenses;
 
-        <p>
-            I can currently help you with:
-        </p>
+        answer = `
+            💰 Your available balance is:
 
-        <ul>
+            <strong>
+                ₹${balance.toLocaleString("en-IN")}
+            </strong>
+        `;
+    }
 
-            <li>
-                How can I save more money?
-            </li>
+    else {
+        answer = `
+            🤖 I can help you with questions like:
 
-            <li>
-                Where am I spending the most?
-            </li>
+            <br><br>
 
-            <li>
-                Am I staying within my budget?
-            </li>
+            • How can I save more money?
+            <br>
+            • Where am I spending the most?
+            <br>
+            • What is my current budget?
+            <br>
+            • How much have I spent?
+            <br>
+            • What is my balance?
+            <br>
+            • What is my income?
+        `;
+    }
 
-            <li>
-                How much are my expenses?
-            </li>
-
-        </ul>
-
-    `;
-
+    aiResponse.innerHTML = answer;
 }
 
+// ==========================================
+// PAGE LOAD
+// ==========================================
 
-/* ================= INITIALIZATION ================= */
+document.addEventListener(
+    "DOMContentLoaded",
+    async function() {
 
-updateDashboard();
+        const token =
+            localStorage.getItem(
+                "fintrackToken"
+            );
 
-updateBudget();
+        const authPage =
+            document.getElementById("authPage");
 
-updateExpenseChart();
+        const mainApp =
+            document.getElementById("mainApp");
 
-updateFinancialWarnings();
+        if (token) {
+
+            if (authPage) {
+                authPage.classList.add("hidden");
+            }
+
+            if (mainApp) {
+                mainApp.classList.remove("hidden");
+            }
+
+            const userName =
+                localStorage.getItem(
+                    "fintrackUserName"
+                );
+
+            const welcomeText =
+                document.getElementById(
+                    "welcomeText"
+                );
+
+            if (welcomeText && userName) {
+                welcomeText.textContent =
+                    `Welcome back, ${userName}!`;
+            }
+
+            // Load saved data
+            await loadFinancialData();
+
+        } else {
+
+            if (authPage) {
+                authPage.classList.remove("hidden");
+            }
+
+            if (mainApp) {
+                mainApp.classList.add("hidden");
+            }
+
+            updateDashboard();
+            updateBudget();
+            updateExpenseChart();
+            updateRecentExpenses();
+            updateFinancialWarnings();
+        }
+    }
+);
