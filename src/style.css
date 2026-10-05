@@ -1,183 +1,174 @@
 * {
-    margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
 
 body {
+    margin: 0;
     font-family: Arial, sans-serif;
-    background: #f4f7fa;
+    background: #f5f7fa;
     color: #222;
-    line-height: 1.6;
 }
 
 
-/* Header */
+/* HEADER */
 
 header {
     background: #1f4e79;
     color: white;
-    padding: 20px 40px;
-
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo {
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.tagline {
-    font-size: 15px;
+    text-align: center;
+    padding: 30px 20px;
 }
 
 
-/* Welcome */
+header h1 {
+    margin: 0;
+    font-size: 36px;
+}
+
+
+header p {
+    margin-top: 8px;
+}
+
+
+/* WELCOME */
 
 .welcome {
-    background: white;
     text-align: center;
-    padding: 60px 20px;
+    padding: 50px 20px;
+    background: white;
 }
 
-.welcome h1 {
-    font-size: 36px;
-    margin-bottom: 15px;
+
+.welcome h2 {
+    font-size: 30px;
 }
+
 
 .welcome p {
     color: #666;
-    margin-bottom: 25px;
+    font-size: 17px;
 }
+
+
+button {
+    cursor: pointer;
+}
+
 
 .welcome button {
     background: #1f4e79;
     color: white;
     border: none;
-    padding: 14px 28px;
+    padding: 13px 25px;
     border-radius: 8px;
-    cursor: pointer;
     font-size: 16px;
 }
 
-.welcome button:hover {
-    background: #163a5c;
-}
 
+/* GENERAL SECTIONS */
 
-/* Main */
-
-main {
-    max-width: 1100px;
-    margin: 40px auto;
-    padding: 0 20px;
-}
-
-
-/* Common Sections */
-
-.dashboard,
+.dashboard-section,
 .form-section,
 .budget-section,
+.warning-section,
 .chart-section,
 .ai-section,
 .recent-section,
 .features-section {
-    background: white;
+    max-width: 1000px;
+    margin: 30px auto;
     padding: 30px;
+    background: white;
     border-radius: 12px;
-    margin-bottom: 30px;
-
-    box-shadow:
-        0 3px 10px rgba(0, 0, 0, 0.08);
 }
 
 
 section h2 {
     text-align: center;
-    margin-bottom: 25px;
+    color: #1f4e79;
+    margin-top: 0;
 }
 
 
-/* Dashboard */
+/* DASHBOARD */
 
-.dashboard-cards {
+.dashboard {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 }
 
+
 .card {
     padding: 25px;
-    border-radius: 10px;
     text-align: center;
+    border-radius: 10px;
+    background: #f4f7fa;
 }
 
+
 .card h3 {
-    margin-bottom: 10px;
+    margin-top: 0;
 }
+
 
 .card p {
     font-size: 28px;
     font-weight: bold;
 }
 
+
 .income-card {
-    background: #e8f5e9;
+    border-top: 5px solid green;
 }
+
 
 .expense-card {
-    background: #ffebee;
+    border-top: 5px solid red;
 }
+
 
 .balance-card {
-    background: #e3f2fd;
+    border-top: 5px solid #1f4e79;
 }
 
 
-/* Forms */
+/* FORMS */
 
 .form-container {
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
+    gap: 12px;
     justify-content: center;
+    flex-wrap: wrap;
 }
+
 
 .form-container input,
 .form-container select {
-    padding: 12px;
+    padding: 13px;
     border: 1px solid #ccc;
     border-radius: 7px;
     font-size: 15px;
 }
 
+
 .form-container button {
-    padding: 12px 20px;
+    padding: 13px 22px;
     border: none;
+    border-radius: 7px;
     background: #1f4e79;
     color: white;
-    border-radius: 7px;
-    cursor: pointer;
-}
-
-.form-container button:hover {
-    background: #163a5c;
 }
 
 
-/* Budget */
+/* BUDGET */
 
 .budget-item {
-    margin-bottom: 22px;
+    margin: 22px 0;
 }
 
-.budget-item:last-child {
-    margin-bottom: 0;
-}
 
 .budget-title {
     display: flex;
@@ -186,91 +177,114 @@ section h2 {
     font-weight: bold;
 }
 
-.budget-bar {
+
+.progress {
     width: 100%;
-    height: 18px;
+    height: 14px;
     background: #e5e5e5;
-    border-radius: 10px;
+    border-radius: 20px;
     overflow: hidden;
 }
 
-.budget-progress {
+
+.progress-bar {
     height: 100%;
+    width: 0%;
     background: #1f4e79;
-    border-radius: 10px;
-    transition: width 0.4s ease;
+    transition: width 0.3s ease;
 }
 
 
-/* Expense Chart */
+/* WARNINGS */
 
-.chart-section h2 {
-    margin-bottom: 8px;
-}
-
-.chart-description {
+.section-description {
     text-align: center;
     color: #666;
-    margin-bottom: 30px;
 }
 
-.chart-container {
-    width: 100%;
+
+.warnings-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.chart-row {
-    margin-bottom: 22px;
+
+.warning {
+    padding: 18px;
+    border-radius: 8px;
+    border-left: 5px solid;
 }
 
-.chart-row:last-child {
+
+.warning p {
     margin-bottom: 0;
 }
+
+
+.warning.success {
+    background: #eef9f0;
+    border-left-color: green;
+}
+
+
+.warning.info {
+    background: #eef5ff;
+    border-left-color: #1f4e79;
+}
+
+
+.warning.warning-box {
+    background: #fff8e6;
+    border-left-color: #f0a500;
+}
+
+
+.warning.danger {
+    background: #fff0f0;
+    border-left-color: red;
+}
+
+
+/* EXPENSE CHART */
+
+.chart-item {
+    margin: 20px 0;
+}
+
 
 .chart-label {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 8px;
+    margin-bottom: 7px;
     font-weight: bold;
 }
 
-.chart-label span:last-child {
-    color: #555;
-}
 
-.chart-bar {
-    width: 100%;
+.chart-bar-background {
     height: 18px;
     background: #e5e5e5;
-    border-radius: 10px;
+    border-radius: 20px;
     overflow: hidden;
 }
 
-.chart-progress {
+
+.chart-bar {
     height: 100%;
+    width: 0%;
     background: #1f4e79;
-    border-radius: 10px;
     transition: width 0.4s ease;
 }
 
-.chart-message {
-    text-align: center;
-    margin-top: 25px;
-    color: #777;
-    font-size: 14px;
-}
 
-
-/* AI Assistant */
-
-.ai-section h2 {
-    margin-bottom: 8px;
-}
+/* AI */
 
 .ai-description {
     text-align: center;
     color: #666;
     margin-bottom: 25px;
 }
+
 
 .ai-input-container {
     display: flex;
@@ -279,109 +293,86 @@ section h2 {
     margin: 0 auto;
 }
 
+
 .ai-input-container input {
     flex: 1;
     padding: 14px;
-
     border: 1px solid #ccc;
     border-radius: 8px;
-
     font-size: 15px;
 }
+
 
 .ai-input-container button {
     padding: 14px 25px;
-
     border: none;
     border-radius: 8px;
-
     background: #1f4e79;
     color: white;
-
-    cursor: pointer;
     font-size: 15px;
 }
+
 
 .ai-input-container button:hover {
     background: #163a5c;
 }
+
 
 .ai-example-questions {
     max-width: 800px;
     margin: 20px auto;
 }
 
+
 .ai-example-questions p {
     margin-bottom: 10px;
     font-weight: bold;
 }
 
+
 .ai-example-questions button {
     margin: 5px;
     padding: 9px 14px;
-
     border: 1px solid #1f4e79;
     border-radius: 20px;
-
     background: white;
     color: #1f4e79;
-
-    cursor: pointer;
 }
+
 
 .ai-example-questions button:hover {
     background: #1f4e79;
     color: white;
 }
 
+
 .ai-response {
     max-width: 800px;
     margin: 25px auto 0;
-
     padding: 20px;
-
     background: #f4f7fa;
-
     border-left: 5px solid #1f4e79;
     border-radius: 8px;
-
     line-height: 1.6;
 }
+
 
 .ai-response strong {
     color: #1f4e79;
 }
 
 
-/* Recent Expenses */
+/* RECENT EXPENSES */
 
-.expense-item {
+.expense-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-
     padding: 15px;
-
-    border-bottom: 1px solid #eee;
+    margin: 8px 0;
+    background: #f4f7fa;
+    border-radius: 7px;
 }
 
-.expense-item:last-child {
-    border-bottom: none;
-}
-
-.expense-name {
-    font-weight: bold;
-}
-
-.expense-category {
-    color: #777;
-    font-size: 14px;
-}
-
-.expense-amount {
-    font-weight: bold;
-    color: #d32f2f;
-}
 
 .empty-message {
     text-align: center;
@@ -389,109 +380,83 @@ section h2 {
 }
 
 
-/* Features */
+/* FEATURES */
 
 .features {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
+    gap: 15px;
 }
 
-.feature {
-    text-align: center;
+
+.feature-card {
     padding: 20px;
-    border-radius: 10px;
     background: #f4f7fa;
+    border-radius: 10px;
+    text-align: center;
 }
 
-.feature-icon {
-    font-size: 35px;
-    margin-bottom: 10px;
+
+.feature-card h3 {
+    color: #1f4e79;
 }
 
-.feature h3 {
-    margin-bottom: 8px;
-}
 
-.feature p {
+.feature-card p {
     color: #666;
-    font-size: 14px;
 }
 
 
-/* Footer */
+/* FOOTER */
 
 footer {
+    text-align: center;
     background: #1f4e79;
     color: white;
-
-    text-align: center;
-
-    padding: 20px;
+    padding: 25px;
+    margin-top: 40px;
 }
 
 
-/* Mobile */
+/* MOBILE */
 
-@media (max-width: 800px) {
+@media (max-width: 768px) {
 
-    header {
-        flex-direction: column;
-        gap: 8px;
-        text-align: center;
-    }
-
-    .dashboard-cards {
+    .dashboard {
         grid-template-columns: 1fr;
     }
 
+
     .features {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
     }
 
-}
 
-
-@media (max-width: 600px) {
-
-    .welcome h1 {
-        font-size: 28px;
+    .dashboard-section,
+    .form-section,
+    .budget-section,
+    .warning-section,
+    .chart-section,
+    .ai-section,
+    .recent-section,
+    .features-section {
+        margin: 20px 10px;
+        padding: 20px;
     }
 
-    .form-container {
-        flex-direction: column;
-    }
-
-    .form-container input,
-    .form-container select,
-    .form-container button {
-        width: 100%;
-    }
-
-    .chart-label {
-        font-size: 14px;
-    }
 
     .ai-input-container {
         flex-direction: column;
     }
 
+
     .ai-input-container button {
         width: 100%;
     }
 
-    .ai-example-questions button {
-        width: 100%;
-        margin: 5px 0;
-    }
 
-    .features {
-        grid-template-columns: 1fr;
-    }
-
-    .expense-item {
+    .expense-row {
         flex-direction: column;
-        align-items: flex-start;
         gap: 5px;
     }
 
