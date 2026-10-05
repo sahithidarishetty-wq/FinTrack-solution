@@ -2,26 +2,38 @@
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>FinTrack - Personal Finance Manager</title>
 
     <link rel="stylesheet" href="style.css">
+
 </head>
+
 
 <body>
 
+
     <!-- Header -->
+
     <header>
+
         <h1>FinTrack</h1>
+
         <p>Personal Finance & AI Assistant</p>
+
     </header>
+
 
 
     <main>
 
-        <!-- Welcome -->
+
+        <!-- Welcome Section -->
+
         <section class="welcome">
 
             <h2>Welcome to FinTrack</h2>
@@ -38,33 +50,60 @@
         </section>
 
 
+
         <!-- Dashboard -->
+
         <section class="dashboard">
 
+
             <div class="card">
+
                 <h3>Total Income</h3>
-                <p id="totalIncome">₹0</p>
+
+                <p id="totalIncome">
+                    ₹0
+                </p>
+
             </div>
 
+
+
             <div class="card">
+
                 <h3>Total Expenses</h3>
-                <p id="totalExpenses">₹0</p>
+
+                <p id="totalExpenses">
+                    ₹0
+                </p>
+
             </div>
 
+
+
             <div class="card">
+
                 <h3>Balance</h3>
-                <p id="savings">₹0</p>
+
+                <p id="savings">
+                    ₹0
+                </p>
+
             </div>
+
 
         </section>
 
 
+
         <!-- Add Income -->
+
         <section class="expense-section">
 
             <h2>Add Income</h2>
 
+
             <div class="expense-form">
+
 
                 <input
                     type="text"
@@ -72,27 +111,34 @@
                     placeholder="Income source (e.g. Salary)"
                 >
 
+
                 <input
                     type="number"
                     id="incomeAmount"
                     placeholder="Amount"
                 >
 
+
                 <button onclick="addIncome()">
                     Add Income
                 </button>
+
 
             </div>
 
         </section>
 
 
+
         <!-- Add Expense -->
+
         <section class="expense-section">
 
             <h2>Add an Expense</h2>
 
+
             <div class="expense-form">
+
 
                 <input
                     type="text"
@@ -100,35 +146,393 @@
                     placeholder="Expense name (e.g. Food)"
                 >
 
+
                 <input
                     type="number"
                     id="expenseAmount"
                     placeholder="Amount"
                 >
 
+
                 <select id="expenseCategory">
 
-                    <option value="Food">Food</option>
-                    <option value="Transport">Transport</option>
-                    <option value="Shopping">Shopping</option>
-                    <option value="Bills">Bills</option>
-                    <option value="Other">Other</option>
+                    <option value="Food">
+                        Food
+                    </option>
+
+                    <option value="Transport">
+                        Transport
+                    </option>
+
+                    <option value="Shopping">
+                        Shopping
+                    </option>
+
+                    <option value="Bills">
+                        Bills
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
 
                 </select>
+
 
                 <button onclick="addExpense()">
                     Add Expense
                 </button>
+
 
             </div>
 
         </section>
 
 
+
+        <!-- Monthly Budget -->
+
+        <section class="budget-section">
+
+
+            <h2>Monthly Budget</h2>
+
+
+            <div class="budget-list">
+
+
+                <!-- Food -->
+
+                <div class="budget-item">
+
+                    <div class="budget-info">
+
+                        <h3>🍔 Food</h3>
+
+                        <p id="foodBudgetText">
+                            ₹0 / ₹2,000
+                        </p>
+
+                    </div>
+
+
+                    <div class="budget-bar">
+
+                        <div
+                            class="budget-progress"
+                            id="foodProgress"
+                            style="width: 0%;"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Transport -->
+
+                <div class="budget-item">
+
+                    <div class="budget-info">
+
+                        <h3>🚌 Transport</h3>
+
+                        <p id="transportBudgetText">
+                            ₹0 / ₹1,500
+                        </p>
+
+                    </div>
+
+
+                    <div class="budget-bar">
+
+                        <div
+                            class="budget-progress"
+                            id="transportProgress"
+                            style="width: 0%;"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Shopping -->
+
+                <div class="budget-item">
+
+                    <div class="budget-info">
+
+                        <h3>🛍️ Shopping</h3>
+
+                        <p id="shoppingBudgetText">
+                            ₹0 / ₹3,000
+                        </p>
+
+                    </div>
+
+
+                    <div class="budget-bar">
+
+                        <div
+                            class="budget-progress"
+                            id="shoppingProgress"
+                            style="width: 0%;"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Bills -->
+
+                <div class="budget-item">
+
+                    <div class="budget-info">
+
+                        <h3>💡 Bills</h3>
+
+                        <p id="billsBudgetText">
+                            ₹0 / ₹2,500
+                        </p>
+
+                    </div>
+
+
+                    <div class="budget-bar">
+
+                        <div
+                            class="budget-progress"
+                            id="billsProgress"
+                            style="width: 0%;"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Other -->
+
+                <div class="budget-item">
+
+                    <div class="budget-info">
+
+                        <h3>📦 Other</h3>
+
+                        <p id="otherBudgetText">
+                            ₹0 / ₹2,000
+                        </p>
+
+                    </div>
+
+
+                    <div class="budget-bar">
+
+                        <div
+                            class="budget-progress"
+                            id="otherProgress"
+                            style="width: 0%;"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- Expense Chart -->
+
+        <section class="chart-section">
+
+
+            <h2>Expense Breakdown</h2>
+
+
+            <p class="chart-description">
+                See where your money is going.
+            </p>
+
+
+            <div class="chart-container">
+
+
+                <div class="chart-row">
+
+
+                    <div class="chart-label">
+
+                        <span>🍔 Food</span>
+
+                        <span id="foodChartAmount">
+                            ₹0
+                        </span>
+
+                    </div>
+
+
+                    <div class="chart-bar">
+
+                        <div
+                            class="chart-progress"
+                            id="foodChart"
+                            style="width: 0%;"
+                        ></div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="chart-row">
+
+
+                    <div class="chart-label">
+
+                        <span>🚌 Transport</span>
+
+                        <span id="transportChartAmount">
+                            ₹0
+                        </span>
+
+                    </div>
+
+
+                    <div class="chart-bar">
+
+                        <div
+                            class="chart-progress"
+                            id="transportChart"
+                            style="width: 0%;"
+                        ></div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="chart-row">
+
+
+                    <div class="chart-label">
+
+                        <span>🛍️ Shopping</span>
+
+                        <span id="shoppingChartAmount">
+                            ₹0
+                        </span>
+
+                    </div>
+
+
+                    <div class="chart-bar">
+
+                        <div
+                            class="chart-progress"
+                            id="shoppingChart"
+                            style="width: 0%;"
+                        ></div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="chart-row">
+
+
+                    <div class="chart-label">
+
+                        <span>💡 Bills</span>
+
+                        <span id="billsChartAmount">
+                            ₹0
+                        </span>
+
+                    </div>
+
+
+                    <div class="chart-bar">
+
+                        <div
+                            class="chart-progress"
+                            id="billsChart"
+                            style="width: 0%;"
+                        ></div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="chart-row">
+
+
+                    <div class="chart-label">
+
+                        <span>📦 Other</span>
+
+                        <span id="otherChartAmount">
+                            ₹0
+                        </span>
+
+                    </div>
+
+
+                    <div class="chart-bar">
+
+                        <div
+                            class="chart-progress"
+                            id="otherChart"
+                            style="width: 0%;"
+                        ></div>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <div
+                id="chartMessage"
+                class="chart-message"
+            >
+                Add some expenses to see your spending breakdown.
+            </div>
+
+
+        </section>
+
+
+
         <!-- Recent Expenses -->
+
         <section class="expense-list-section">
 
+
             <h2>Recent Expenses</h2>
+
 
             <div id="expenseList">
 
@@ -138,66 +542,90 @@
 
             </div>
 
+
         </section>
 
 
+
         <!-- Features -->
+
         <section class="features">
+
 
             <h2>What FinTrack Can Do</h2>
 
+
             <div class="feature-list">
 
+
                 <div class="feature">
+
                     <h3>💰 Track Expenses</h3>
 
                     <p>
                         Record and monitor your daily spending.
                     </p>
+
                 </div>
 
 
+
                 <div class="feature">
+
                     <h3>📊 Manage Budget</h3>
 
                     <p>
-                        Set budgets and keep your spending under control.
+                        Set budgets and keep your spending
+                        under control.
                     </p>
+
                 </div>
 
 
+
                 <div class="feature">
+
                     <h3>🤖 AI Insights</h3>
 
                     <p>
-                        Get simple suggestions to improve your financial habits.
+                        Get simple suggestions to improve
+                        your financial habits.
                     </p>
+
                 </div>
 
 
+
                 <div class="feature">
+
                     <h3>🔐 Secure</h3>
 
                     <p>
                         Keep your financial information protected.
                     </p>
+
                 </div>
+
 
             </div>
 
         </section>
 
+
     </main>
 
 
+
     <!-- Footer -->
+
     <footer>
 
         <p>
-            © 2026 FinTrack | Personal Finance Assistant
+            © 2026 FinTrack | Personal Finance & AI Assistant
         </p>
 
     </footer>
+
 
 
     <script src="script.js"></script>

@@ -5,6 +5,43 @@ let totalIncome = 0;
 let totalExpenses = 0;
 
 
+
+// Monthly budgets
+
+const budgets = {
+
+    Food: 2000,
+
+    Transport: 1500,
+
+    Shopping: 3000,
+
+    Bills: 2500,
+
+    Other: 2000
+
+};
+
+
+
+// Current spending by category
+
+const categoryExpenses = {
+
+    Food: 0,
+
+    Transport: 0,
+
+    Shopping: 0,
+
+    Bills: 0,
+
+    Other: 0
+
+};
+
+
+
 // Start Tracking
 
 function startTracking() {
@@ -14,6 +51,7 @@ function startTracking() {
     );
 
 }
+
 
 
 // Add Income
@@ -59,10 +97,12 @@ function addIncome() {
         totalIncome.toLocaleString("en-IN");
 
 
+    // Update balance
+
     updateBalance();
 
 
-    // Clear input
+    // Clear inputs
 
     document.getElementById(
         "incomeName"
@@ -74,9 +114,12 @@ function addIncome() {
     ).value = "";
 
 
-    alert("Income added successfully!");
+    alert(
+        "Income added successfully!"
+    );
 
 }
+
 
 
 // Add Expense
@@ -116,6 +159,13 @@ function addExpense() {
         totalExpenses + expenseAmount;
 
 
+    // Update category spending
+
+    categoryExpenses[expenseCategory] =
+        categoryExpenses[expenseCategory] +
+        expenseAmount;
+
+
     // Update dashboard
 
     document.getElementById(
@@ -125,7 +175,21 @@ function addExpense() {
         totalExpenses.toLocaleString("en-IN");
 
 
+    // Update balance
+
     updateBalance();
+
+
+    // Update budget
+
+    updateBudget(
+        expenseCategory
+    );
+
+
+    // Update chart
+
+    updateExpenseChart();
 
 
     // Get expense list
@@ -211,7 +275,8 @@ function addExpense() {
 }
 
 
-// Calculate Balance
+
+// Update Balance
 
 function updateBalance() {
 
@@ -226,3 +291,201 @@ function updateBalance() {
         balance.toLocaleString("en-IN");
 
 }
+
+
+
+// Update Budget
+
+function updateBudget(category) {
+
+    const spent =
+        categoryExpenses[category];
+
+    const budget =
+        budgets[category];
+
+
+    const percentage =
+        Math.min(
+            (spent / budget) * 100,
+            100
+        );
+
+
+    // Create IDs
+
+    const categoryId =
+        category.toLowerCase();
+
+
+    const textElement =
+        document.getElementById(
+            categoryId + "BudgetText"
+        );
+
+
+    const progressElement =
+        document.getElementById(
+            categoryId + "Progress"
+        );
+
+
+    // Update text
+
+    textElement.textContent =
+        "₹" +
+        spent.toLocaleString("en-IN") +
+        " / ₹" +
+        budget.toLocaleString("en-IN");
+
+
+    // Update progress bar
+
+    progressElement.style.width =
+        percentage + "%";
+
+
+    // Budget warning
+
+    if (spent >= budget) {
+
+        progressElement.style.background =
+            "#d9534f";
+
+    }
+
+    else {
+
+        progressElement.style.background =
+            "#1f4e79";
+
+    }
+
+}
+
+
+
+// Update Expense Chart
+
+function updateExpenseChart() {
+
+    const categories = [
+
+        "Food",
+
+        "Transport",
+
+        "Shopping",
+
+        "Bills",
+
+        "Other"
+
+    ];
+
+
+    // Find the highest expense
+
+    let highestExpense = 0;
+
+
+    categories.forEach(
+        function(category) {
+
+            if (
+                categoryExpenses[category] >
+                highestExpense
+            ) {
+
+                highestExpense =
+                    categoryExpenses[category];
+
+            }
+
+        }
+    );
+
+
+    // Update every category
+
+    categories.forEach(
+        function(category) {
+
+            const amount =
+                categoryExpenses[category];
+
+
+            const categoryId =
+                category.toLowerCase();
+
+
+            const chartElement =
+                document.getElementById(
+                    categoryId + "Chart"
+                );
+
+
+            const amountElement =
+                document.getElementById(
+                    categoryId + "ChartAmount"
+                );
+
+
+            // Update amount
+
+            amountElement.textContent =
+                "₹" +
+                amount.toLocaleString("en-IN");
+
+
+            // Calculate chart percentage
+
+            let percentage = 0;
+
+
+            if (highestExpense > 0) {
+
+                percentage =
+                    (amount / highestExpense) * 100;
+
+            }
+
+
+            // Update chart
+
+            chartElement.style.width =
+                percentage + "%";
+
+        }
+    );
+
+
+    // Update chart message
+
+    const chartMessage =
+        document.getElementById(
+            "chartMessage"
+        );
+
+
+    if (totalExpenses === 0) {
+
+        chartMessage.textContent =
+            "Add some expenses to see your spending breakdown.";
+
+    }
+
+    else {
+
+        chartMessage.textContent =
+            "Your spending breakdown is updated automatically.";
+
+    }
+
+}
+
+
+
+// Initialize chart
+
+updateExpenseChart();
