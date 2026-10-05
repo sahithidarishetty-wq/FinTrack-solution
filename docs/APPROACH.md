@@ -93,30 +93,41 @@ The trust boundaries are:
 
 | Milestone / Phase | Time Window | Key Objectives & Deliverables | Security Verification | Status |
 |---|---|---|---|---|
-| **Phase 1: Foundation & Setup** | 0h – 4h | Contract onboarding, repo setup, baseline data schemas | Secret scan & baseline check | `Planned` |
-| **Phase 2: Core Domain & Auth** | 4h – 12h | Core business logic, secure authentication & authorization | Auth test suite & crypto validation | `Planned` |
-| **Phase 3: Security & Hardening**| 12h – 18h | Input validation, rate limiting, error handling, security middleware | SAST scanning & edge case tests | `Planned` |
+| **Phase 1: Foundation & Setup** | 0h – 4h | Contract onboarding, repo setup, baseline data schemas, secure config management | Secret scan & baseline check | `In Progress` |
+| **Phase 2: Core Domain & Auth** | 4h – 12h | Core business logic, secure authentication & authorization, transaction workflows | Auth test suite & crypto validation | `Planned` |
+| **Phase 3: Security & Hardening**| 12h – 18h | Input validation, rate limiting, error handling, security middleware, audit logging | SAST scanning & edge case tests | `Planned` |
 | **Phase 4: Polish & Deployment**| 18h – 24h | UI polish, live cloud deployment, final docs & commit freeze | Live deployment URL check | `Planned` |
 
 ---
 
 ## 4. Architecture Decision Records (ADRs)
 
-### ADR-001: [Title of First Major Decision]
-- **Status:** [Proposed | Accepted | Superseded]
-- **Context:** *What was the architectural context, problem, or requirement?*
+### ADR-001: Secure Personal Finance MVP with Backend-Enforced Authorization
+- **Status:** Accepted
+- **Context:** FinTrack manages sensitive user financial data, including income, spending, budgets, and potentially AI-generated insights. A compromise in the client or a malicious request could otherwise expose private information.
 - **Options Considered:** 
-  1. *Option A (e.g., choice 1)*
-  2. *Option B (e.g., choice 2)*
-- **Decision & Rationale:** *What was decided and why was it chosen over alternatives?*
-- **Security & Performance Trade-offs:** *What are the security implications or performance impacts?*
+  1. Trust the frontend for access checks and ownership validation
+  2. Enforce all authorization decisions on the backend
+- **Decision & Rationale:** The team selected backend-enforced authorization with session verification, ownership checks, and strict API validation. This ensures that even a malicious or modified client cannot read or mutate another user’s records.
+- **Security & Performance Trade-offs:** The added checks create minimal overhead and are worth the security gain. The performance footprint remains low because the validation occurs only at the API boundary and the database layer remains efficiently scoped.
 
-### ADR-002: [Title of Second Major Decision]
-- **Status:** [Proposed | Accepted | Superseded]
-- **Context:**
+### ADR-002: API-First Architecture for a Secure 24-Hour Build
+- **Status:** Accepted
+- **Context:** The hackathon requires a functional, deployable solution under a tight deadline while still prioritizing secure engineering practices.
 - **Options Considered:**
-- **Decision & Rationale:**
-- **Security & Performance Trade-offs:**
+  1. Large full-stack monolith with broader feature depth and more complexity
+  2. Lean API-first architecture with secure core workflows and a polished interface
+- **Decision & Rationale:** The project uses a lean API-first design so authentication, authorization, validation, and persistence can be hardened quickly. This makes the system easier to reason about and easier to test under time pressure.
+- **Security & Performance Trade-offs:** The architecture reduces complexity and makes security controls easier to audit. The trade-off is a narrower initial feature set, but the result is a stronger, more maintainable delivery for the hackathon.
+
+### ADR-003: SQLite for Local Development, PostgreSQL-Ready for Production
+- **Status:** Accepted
+- **Context:** The solution must be built rapidly, but it still needs to be realistic and production-aware.
+- **Options Considered:**
+  1. Full PostgreSQL setup from day one
+  2. SQLite for prototype and migration path toward PostgreSQL
+- **Decision & Rationale:** SQLite is preferred for the initial sprint because it is fast to configure and sufficient for a secure personal finance MVP. PostgreSQL remains the preferred production database because of stronger multi-user scalability and transaction integrity.
+- **Security & Performance Trade-offs:** SQLite is simple and effective for early development, while PostgreSQL offers better concurrency and long-term production reliability. The migration path is clear and does not compromise the current security model.
 
 ---
 
@@ -124,12 +135,17 @@ The trust boundaries are:
 
 *Maintain this chronological log as your team builds during the 24-hour hackathon.*
 
-### [YYYY-MM-DD HH:MM IST] Entry 1: Project Initialization & Scope Lock
-- **Focus:** Initial repository setup, team alignment, and schema architecture.
-- **Key Challenges:** 
-- **Resolution:** 
+### 2026-10-05 15:20 IST Entry 1: Project Initialization & Scope Lock
+- **Focus:** Defined the FinTrack scope, team alignment, and secure architecture direction.
+- **Key Challenges:** Balancing a quick 24-hour build with security-first design under the competition constraints.
+- **Resolution:** Chose a layered API-first architecture, secure authentication workflow, and backend-enforced authorization model to ensure sensitive financial data is protected without overcomplicating the build.
 
-### [YYYY-MM-DD HH:MM IST] Entry 2: Implementation Milestone Progress
+### 2026-10-05 16:00 IST Entry 2: Core Finance Domain Definition
+- **Focus:** Identified the critical user flows: login, transaction creation, budget tracking, and insight generation.
+- **Key Challenges:** Keeping the MVP manageable while still covering the most sensitive finance operations.
+- **Resolution:** Prioritized essential, high-value workflows and separated them from optional AI features so the team can focus on security and correctness first.
+
+### [YYYY-MM-DD HH:MM IST] Entry 3: Implementation Milestone Progress
 - **Focus:** 
 - **Key Challenges:** 
 - **Resolution:** 
@@ -139,10 +155,12 @@ The trust boundaries are:
 ## 6. Testing, Security Verification & Deployment Record
 
 ### 6.1 Testing & Security Verification Strategy
-- **Unit & Integration Tests:** (Describe test coverage in `src/`)
-- **Static Analysis & Linting:** (Lint and security checks run)
+- **Unit & Integration Tests:** Cover authentication, authorization, transaction logic, budget validation, and AI insight input handling in `src/`.
+- **Static Analysis & Linting:** Run linting, dependency checks, and secret scanning to detect misconfigurations or unsafe coding patterns before deployment.
+- **Security Edge Cases:** Validate malformed input, unauthorized access attempts, duplicate transactions, invalid session tokens, and abnormal budget scenarios.
 
 ### 6.2 Deployment Verification
-- **Live Deployment Platform:** (e.g., Vercel, Render, Railway, AWS)
-- **Deployment URL:** (Recorded in `metadata/submission.yaml` and `deployment/README.md`)
-- **Health Check Endpoint:** (e.g., `/health` or `/api/health`)
+- **Live Deployment Platform:** Render / Railway / AWS-compatible cloud hosting
+- **Deployment URL:** Recorded in `metadata/submission.yaml` and `deployment/README.md`
+- **Health Check Endpoint:** `/health` or `/api/health`
+- **Verification Checklist:** Confirm the app starts successfully, API endpoints are reachable, authentication works, and no secrets are exposed in logs or public config files.
