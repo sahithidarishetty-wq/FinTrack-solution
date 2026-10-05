@@ -11,28 +11,189 @@ body {
 }
 
 
-/* HEADER */
+/* ================= AUTH PAGE ================= */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background: #f5f7fa;
+}
+
+
+.auth-card {
+    width: 100%;
+    max-width: 450px;
+    background: white;
+    padding: 35px;
+    border-radius: 15px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+}
+
+
+.auth-logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+
+.auth-logo h1 {
+    margin: 0;
+    color: #1f4e79;
+    font-size: 38px;
+}
+
+
+.auth-logo p {
+    color: #666;
+    margin-top: 8px;
+}
+
+
+.auth-card h2 {
+    text-align: center;
+    color: #1f4e79;
+    margin-bottom: 8px;
+}
+
+
+.auth-description {
+    text-align: center;
+    color: #777;
+    margin-bottom: 25px;
+}
+
+
+.auth-input {
+    margin-bottom: 18px;
+}
+
+
+.auth-input label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: bold;
+}
+
+
+.auth-input input {
+    width: 100%;
+    padding: 13px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+
+.password-container {
+    display: flex;
+    gap: 5px;
+}
+
+
+.password-container input {
+    flex: 1;
+}
+
+
+.password-container button {
+    width: 48px;
+    border: 1px solid #ccc;
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+
+.auth-button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 8px;
+    background: #1f4e79;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+
+.auth-button:hover {
+    background: #163a5c;
+}
+
+
+.switch-auth {
+    text-align: center;
+    margin-top: 20px;
+    color: #666;
+}
+
+
+.switch-auth button {
+    border: none;
+    background: none;
+    color: #1f4e79;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+.demo-notice {
+    text-align: center;
+    font-size: 12px;
+    color: #888;
+    margin-top: 25px;
+    line-height: 1.5;
+}
+
+
+.hidden {
+    display: none !important;
+}
+
+
+/* ================= HEADER ================= */
 
 header {
     background: #1f4e79;
     color: white;
-    text-align: center;
-    padding: 30px 20px;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 
 header h1 {
     margin: 0;
-    font-size: 36px;
+    font-size: 32px;
 }
 
 
 header p {
-    margin-top: 8px;
+    margin: 5px 0 0;
 }
 
 
-/* WELCOME */
+.logout-button {
+    padding: 10px 18px;
+    border: 1px solid white;
+    border-radius: 7px;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+}
+
+
+.logout-button:hover {
+    background: white;
+    color: #1f4e79;
+}
+
+
+/* ================= WELCOME ================= */
 
 .welcome {
     text-align: center;
@@ -52,11 +213,6 @@ header p {
 }
 
 
-button {
-    cursor: pointer;
-}
-
-
 .welcome button {
     background: #1f4e79;
     color: white;
@@ -64,10 +220,11 @@ button {
     padding: 13px 25px;
     border-radius: 8px;
     font-size: 16px;
+    cursor: pointer;
 }
 
 
-/* GENERAL SECTIONS */
+/* ================= SECTIONS ================= */
 
 .dashboard-section,
 .form-section,
@@ -92,7 +249,7 @@ section h2 {
 }
 
 
-/* DASHBOARD */
+/* ================= DASHBOARD ================= */
 
 .dashboard {
     display: grid;
@@ -135,7 +292,7 @@ section h2 {
 }
 
 
-/* FORMS */
+/* ================= FORMS ================= */
 
 .form-container {
     display: flex;
@@ -160,10 +317,11 @@ section h2 {
     border-radius: 7px;
     background: #1f4e79;
     color: white;
+    cursor: pointer;
 }
 
 
-/* BUDGET */
+/* ================= BUDGET ================= */
 
 .budget-item {
     margin: 22px 0;
@@ -195,7 +353,7 @@ section h2 {
 }
 
 
-/* WARNINGS */
+/* ================= WARNINGS ================= */
 
 .section-description {
     text-align: center;
@@ -246,7 +404,7 @@ section h2 {
 }
 
 
-/* EXPENSE CHART */
+/* ================= CHART ================= */
 
 .chart-item {
     margin: 20px 0;
@@ -277,7 +435,7 @@ section h2 {
 }
 
 
-/* AI */
+/* ================= AI ================= */
 
 .ai-description {
     text-align: center;
@@ -310,11 +468,7 @@ section h2 {
     background: #1f4e79;
     color: white;
     font-size: 15px;
-}
-
-
-.ai-input-container button:hover {
-    background: #163a5c;
+    cursor: pointer;
 }
 
 
@@ -337,12 +491,7 @@ section h2 {
     border-radius: 20px;
     background: white;
     color: #1f4e79;
-}
-
-
-.ai-example-questions button:hover {
-    background: #1f4e79;
-    color: white;
+    cursor: pointer;
 }
 
 
@@ -362,7 +511,7 @@ section h2 {
 }
 
 
-/* RECENT EXPENSES */
+/* ================= RECENT EXPENSES ================= */
 
 .expense-row {
     display: flex;
@@ -380,7 +529,7 @@ section h2 {
 }
 
 
-/* FEATURES */
+/* ================= FEATURES ================= */
 
 .features {
     display: grid;
@@ -407,7 +556,7 @@ section h2 {
 }
 
 
-/* FOOTER */
+/* ================= FOOTER ================= */
 
 footer {
     text-align: center;
@@ -418,9 +567,19 @@ footer {
 }
 
 
-/* MOBILE */
+/* ================= MOBILE ================= */
 
 @media (max-width: 768px) {
+
+    header {
+        padding: 20px;
+    }
+
+
+    header h1 {
+        font-size: 26px;
+    }
+
 
     .dashboard {
         grid-template-columns: 1fr;

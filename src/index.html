@@ -15,611 +15,891 @@
 
 <body>
 
-    <!-- HEADER -->
 
-    <header>
+    <!-- ==================== AUTHENTICATION ==================== -->
 
-        <h1>FinTrack</h1>
+    <section id="authPage" class="auth-page">
 
-        <p>Personal Finance & AI Assistant</p>
+        <div class="auth-card">
 
-    </header>
+            <div class="auth-logo">
 
+                <h1>FinTrack</h1>
 
-    <!-- WELCOME -->
+                <p>Personal Finance & AI Assistant</p>
 
-    <section class="welcome">
-
-        <h2>Take Control of Your Money 💰</h2>
-
-        <p>
-            Track your income, expenses, budgets and get
-            simple financial insights.
-        </p>
-
-        <button onclick="startTracking()">
-            Start Tracking
-        </button>
-
-    </section>
+            </div>
 
 
-    <!-- DASHBOARD -->
+            <!-- LOGIN -->
 
-    <section id="dashboard" class="dashboard-section">
+            <div id="loginForm">
 
-        <h2>Dashboard</h2>
+                <h2>Welcome Back 👋</h2>
 
-        <div class="dashboard">
+                <p class="auth-description">
+                    Login to manage your finances.
+                </p>
 
-            <div class="card income-card">
 
-                <h3>Total Income</h3>
+                <div class="auth-input">
 
-                <p id="totalIncome">
-                    ₹0
+                    <label for="loginEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        placeholder="Enter your email"
+                    >
+
+                </div>
+
+
+                <div class="auth-input">
+
+                    <label for="loginPassword">
+                        Password
+                    </label>
+
+                    <div class="password-container">
+
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            placeholder="Enter your password"
+                        >
+
+                        <button
+                            type="button"
+                            onclick="togglePassword('loginPassword', this)"
+                        >
+                            👁️
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    class="auth-button"
+                    onclick="demoLogin()"
+                >
+                    Login
+                </button>
+
+
+                <p class="switch-auth">
+
+                    Don't have an account?
+
+                    <button
+                        onclick="showSignup()"
+                    >
+                        Sign Up
+                    </button>
+
                 </p>
 
             </div>
 
 
-            <div class="card expense-card">
+            <!-- SIGN UP -->
 
-                <h3>Total Expenses</h3>
+            <div id="signupForm" class="hidden">
 
-                <p id="totalExpenses">
-                    ₹0
+                <h2>Create Account 📝</h2>
+
+                <p class="auth-description">
+                    Create your FinTrack account.
+                </p>
+
+
+                <div class="auth-input">
+
+                    <label for="signupName">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="signupName"
+                        placeholder="Enter your name"
+                    >
+
+                </div>
+
+
+                <div class="auth-input">
+
+                    <label for="signupEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="signupEmail"
+                        placeholder="Enter your email"
+                    >
+
+                </div>
+
+
+                <div class="auth-input">
+
+                    <label for="signupPassword">
+                        Password
+                    </label>
+
+                    <div class="password-container">
+
+                        <input
+                            type="password"
+                            id="signupPassword"
+                            placeholder="Create a password"
+                        >
+
+                        <button
+                            type="button"
+                            onclick="togglePassword('signupPassword', this)"
+                        >
+                            👁️
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div class="auth-input">
+
+                    <label for="confirmPassword">
+                        Confirm Password
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm your password"
+                    >
+
+                </div>
+
+
+                <button
+                    class="auth-button"
+                    onclick="demoSignup()"
+                >
+                    Create Account
+                </button>
+
+
+                <p class="switch-auth">
+
+                    Already have an account?
+
+                    <button
+                        onclick="showLogin()"
+                    >
+                        Login
+                    </button>
+
                 </p>
 
             </div>
 
 
-            <div class="card balance-card">
-
-                <h3>Balance</h3>
-
-                <p id="balance">
-                    ₹0
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ADD INCOME -->
-
-    <section class="form-section">
-
-        <h2>Add Income</h2>
-
-        <div class="form-container">
-
-            <input
-                type="number"
-                id="incomeAmount"
-                placeholder="Enter income amount"
-            >
-
-            <button onclick="addIncome()">
-                Add Income
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <!-- ADD EXPENSE -->
-
-    <section class="form-section">
-
-        <h2>Add Expense</h2>
-
-        <div class="form-container">
-
-            <input
-                type="number"
-                id="expenseAmount"
-                placeholder="Enter expense amount"
-            >
-
-
-            <select id="expenseCategory">
-
-                <option value="Food">
-                    Food
-                </option>
-
-                <option value="Transport">
-                    Transport
-                </option>
-
-                <option value="Shopping">
-                    Shopping
-                </option>
-
-                <option value="Bills">
-                    Bills
-                </option>
-
-                <option value="Other">
-                    Other
-                </option>
-
-            </select>
-
-
-            <button onclick="addExpense()">
-                Add Expense
-            </button>
-
-        </div>
-
-    </section>
-
-
-    <!-- MONTHLY BUDGET -->
-
-    <section class="budget-section">
-
-        <h2>Monthly Budget</h2>
-
-        <div class="budget-container">
-
-            <div class="budget-item">
-
-                <div class="budget-title">
-
-                    <span>Food</span>
-
-                    <span id="foodBudgetText">
-                        ₹0 / ₹2,000
-                    </span>
-
-                </div>
-
-                <div class="progress">
-
-                    <div
-                        id="foodProgress"
-                        class="progress-bar"
-                    ></div>
-
-                </div>
-
-            </div>
-
-
-            <div class="budget-item">
-
-                <div class="budget-title">
-
-                    <span>Transport</span>
-
-                    <span id="transportBudgetText">
-                        ₹0 / ₹1,500
-                    </span>
-
-                </div>
-
-                <div class="progress">
-
-                    <div
-                        id="transportProgress"
-                        class="progress-bar"
-                    ></div>
-
-                </div>
-
-            </div>
-
-
-            <div class="budget-item">
-
-                <div class="budget-title">
-
-                    <span>Shopping</span>
-
-                    <span id="shoppingBudgetText">
-                        ₹0 / ₹3,000
-                    </span>
-
-                </div>
-
-                <div class="progress">
-
-                    <div
-                        id="shoppingProgress"
-                        class="progress-bar"
-                    ></div>
-
-                </div>
-
-            </div>
-
-
-            <div class="budget-item">
-
-                <div class="budget-title">
-
-                    <span>Bills</span>
-
-                    <span id="billsBudgetText">
-                        ₹0 / ₹2,500
-                    </span>
-
-                </div>
-
-                <div class="progress">
-
-                    <div
-                        id="billsProgress"
-                        class="progress-bar"
-                    ></div>
-
-                </div>
-
-            </div>
-
-
-            <div class="budget-item">
-
-                <div class="budget-title">
-
-                    <span>Other</span>
-
-                    <span id="otherBudgetText">
-                        ₹0 / ₹2,000
-                    </span>
-
-                </div>
-
-                <div class="progress">
-
-                    <div
-                        id="otherProgress"
-                        class="progress-bar"
-                    ></div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- SMART WARNINGS -->
-
-    <section class="warning-section">
-
-        <h2>🔔 Smart Financial Warnings</h2>
-
-        <p class="section-description">
-            FinTrack monitors your spending and gives
-            simple financial alerts.
-        </p>
-
-
-        <div id="financialWarnings" class="warnings-container">
-
-            <div class="warning success">
-
-                <strong>💚 You're doing well!</strong>
-
-                <p>
-                    Add your income and expenses to receive
-                    personalized financial warnings.
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- EXPENSE BREAKDOWN -->
-
-    <section class="chart-section">
-
-        <h2>Expense Breakdown</h2>
-
-        <div class="chart-container">
-
-
-            <div class="chart-item">
-
-                <div class="chart-label">
-
-                    <span>Food</span>
-
-                    <span id="foodExpense">
-                        ₹0
-                    </span>
-
-                </div>
-
-                <div class="chart-bar-background">
-
-                    <div
-                        id="foodChart"
-                        class="chart-bar"
-                    ></div>
-
-                </div>
-
-            </div>
-
-
-            <div class="chart-item">
-
-                <div class="chart-label">
-
-                    <span>Transport</span>
-
-                    <span id="transportExpense">
-                        ₹0
-                    </span>
-
-                </div>
-
-                <div class="chart-bar-background">
-
-                    <div
-                        id="transportChart"
-                        class="chart-bar"
-                    ></div>
-
-                </div>
-
-            </div>
-
-
-            <div class="chart-item">
-
-                <div class="chart-label">
-
-                    <span>Shopping</span>
-
-                    <span id="shoppingExpense">
-                        ₹0
-                    </span>
-
-                </div>
-
-                <div class="chart-bar-background">
-
-                    <div
-                        id="shoppingChart"
-                        class="chart-bar"
-                    ></div>
-
-                </div>
-
-            </div>
-
-
-            <div class="chart-item">
-
-                <div class="chart-label">
-
-                    <span>Bills</span>
-
-                    <span id="billsExpense">
-                        ₹0
-                    </span>
-
-                </div>
-
-                <div class="chart-bar-background">
-
-                    <div
-                        id="billsChart"
-                        class="chart-bar"
-                    ></div>
-
-                </div>
-
-            </div>
-
-
-            <div class="chart-item">
-
-                <div class="chart-label">
-
-                    <span>Other</span>
-
-                    <span id="otherExpense">
-                        ₹0
-                    </span>
-
-                </div>
-
-                <div class="chart-bar-background">
-
-                    <div
-                        id="otherChart"
-                        class="chart-bar"
-                    ></div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- AI ASSISTANT -->
-
-    <section class="ai-section">
-
-        <h2>
-            🤖 AI Finance Assistant
-        </h2>
-
-        <p class="ai-description">
-
-            Ask FinTrack for simple advice about
-            your spending, savings, or budget.
-
-        </p>
-
-
-        <div class="ai-input-container">
-
-            <input
-                type="text"
-                id="aiQuestion"
-                placeholder="Example: How can I save more money?"
-            >
-
-            <button onclick="askAI()">
-                Ask AI
-            </button>
-
-        </div>
-
-
-        <div class="ai-example-questions">
-
-            <p>
-                Try asking:
+            <p class="demo-notice">
+                🔒 Authentication will be connected to the secure
+                backend later.
             </p>
 
-
-            <button
-                onclick="useQuestion('How can I save more money?')"
-            >
-                How can I save more money?
-            </button>
-
-
-            <button
-                onclick="useQuestion('Where am I spending the most?')"
-            >
-                Where am I spending the most?
-            </button>
-
-
-            <button
-                onclick="useQuestion('Am I staying within my budget?')"
-            >
-                Am I staying within my budget?
-            </button>
-
         </div>
 
+    </section>
 
-        <div
-            id="aiResponse"
-            class="ai-response"
+
+
+    <!-- ==================== MAIN FINTRACK ==================== -->
+
+    <div id="mainApp" class="hidden">
+
+
+        <!-- HEADER -->
+
+        <header>
+
+            <div>
+
+                <h1>FinTrack</h1>
+
+                <p>Personal Finance & AI Assistant</p>
+
+            </div>
+
+
+            <button
+                class="logout-button"
+                onclick="logout()"
+            >
+                Logout
+            </button>
+
+        </header>
+
+
+
+        <!-- WELCOME -->
+
+        <section class="welcome">
+
+            <h2>
+                Take Control of Your Money 💰
+            </h2>
+
+            <p>
+                Track your income, expenses, budgets and
+                get simple financial insights.
+            </p>
+
+            <button onclick="startTracking()">
+                Start Tracking
+            </button>
+
+        </section>
+
+
+
+        <!-- DASHBOARD -->
+
+        <section
+            id="dashboard"
+            class="dashboard-section"
         >
 
-            <strong>
-                AI Assistant:
-            </strong>
+            <h2>Dashboard</h2>
+
+            <div class="dashboard">
+
+
+                <div class="card income-card">
+
+                    <h3>Total Income</h3>
+
+                    <p id="totalIncome">
+                        ₹0
+                    </p>
+
+                </div>
+
+
+                <div class="card expense-card">
+
+                    <h3>Total Expenses</h3>
+
+                    <p id="totalExpenses">
+                        ₹0
+                    </p>
+
+                </div>
+
+
+                <div class="card balance-card">
+
+                    <h3>Balance</h3>
+
+                    <p id="balance">
+                        ₹0
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ADD INCOME -->
+
+        <section class="form-section">
+
+            <h2>Add Income</h2>
+
+            <div class="form-container">
+
+                <input
+                    type="number"
+                    id="incomeAmount"
+                    placeholder="Enter income amount"
+                >
+
+                <button onclick="addIncome()">
+                    Add Income
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ADD EXPENSE -->
+
+        <section class="form-section">
+
+            <h2>Add Expense</h2>
+
+            <div class="form-container">
+
+                <input
+                    type="number"
+                    id="expenseAmount"
+                    placeholder="Enter expense amount"
+                >
+
+
+                <select id="expenseCategory">
+
+                    <option value="Food">
+                        Food
+                    </option>
+
+                    <option value="Transport">
+                        Transport
+                    </option>
+
+                    <option value="Shopping">
+                        Shopping
+                    </option>
+
+                    <option value="Bills">
+                        Bills
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+
+                <button onclick="addExpense()">
+                    Add Expense
+                </button>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- MONTHLY BUDGET -->
+
+        <section class="budget-section">
+
+            <h2>Monthly Budget</h2>
+
+            <div class="budget-container">
+
+
+                <div class="budget-item">
+
+                    <div class="budget-title">
+
+                        <span>Food</span>
+
+                        <span id="foodBudgetText">
+                            ₹0 / ₹2,000
+                        </span>
+
+                    </div>
+
+                    <div class="progress">
+
+                        <div
+                            id="foodProgress"
+                            class="progress-bar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="budget-item">
+
+                    <div class="budget-title">
+
+                        <span>Transport</span>
+
+                        <span id="transportBudgetText">
+                            ₹0 / ₹1,500
+                        </span>
+
+                    </div>
+
+                    <div class="progress">
+
+                        <div
+                            id="transportProgress"
+                            class="progress-bar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="budget-item">
+
+                    <div class="budget-title">
+
+                        <span>Shopping</span>
+
+                        <span id="shoppingBudgetText">
+                            ₹0 / ₹3,000
+                        </span>
+
+                    </div>
+
+                    <div class="progress">
+
+                        <div
+                            id="shoppingProgress"
+                            class="progress-bar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="budget-item">
+
+                    <div class="budget-title">
+
+                        <span>Bills</span>
+
+                        <span id="billsBudgetText">
+                            ₹0 / ₹2,500
+                        </span>
+
+                    </div>
+
+                    <div class="progress">
+
+                        <div
+                            id="billsProgress"
+                            class="progress-bar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="budget-item">
+
+                    <div class="budget-title">
+
+                        <span>Other</span>
+
+                        <span id="otherBudgetText">
+                            ₹0 / ₹2,000
+                        </span>
+
+                    </div>
+
+                    <div class="progress">
+
+                        <div
+                            id="otherProgress"
+                            class="progress-bar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- SMART WARNINGS -->
+
+        <section class="warning-section">
+
+            <h2>
+                🔔 Smart Financial Warnings
+            </h2>
+
+            <p class="section-description">
+
+                FinTrack monitors your spending and
+                gives simple financial alerts.
+
+            </p>
+
+
+            <div
+                id="financialWarnings"
+                class="warnings-container"
+            >
+
+                <div class="warning success">
+
+                    <strong>
+                        💚 You're doing well!
+                    </strong>
+
+                    <p>
+                        Add your income and expenses to receive
+                        personalized financial warnings.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- EXPENSE BREAKDOWN -->
+
+        <section class="chart-section">
+
+            <h2>
+                Expense Breakdown
+            </h2>
+
+
+            <div class="chart-container">
+
+
+                <div class="chart-item">
+
+                    <div class="chart-label">
+
+                        <span>Food</span>
+
+                        <span id="foodExpense">
+                            ₹0
+                        </span>
+
+                    </div>
+
+                    <div class="chart-bar-background">
+
+                        <div
+                            id="foodChart"
+                            class="chart-bar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="chart-item">
+
+                    <div class="chart-label">
+
+                        <span>Transport</span>
+
+                        <span id="transportExpense">
+                            ₹0
+                        </span>
+
+                    </div>
+
+                    <div class="chart-bar-background">
+
+                        <div
+                            id="transportChart"
+                            class="chart-bar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="chart-item">
+
+                    <div class="chart-label">
+
+                        <span>Shopping</span>
+
+                        <span id="shoppingExpense">
+                            ₹0
+                        </span>
+
+                    </div>
+
+                    <div class="chart-bar-background">
+
+                        <div
+                            id="shoppingChart"
+                            class="chart-bar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="chart-item">
+
+                    <div class="chart-label">
+
+                        <span>Bills</span>
+
+                        <span id="billsExpense">
+                            ₹0
+                        </span>
+
+                    </div>
+
+                    <div class="chart-bar-background">
+
+                        <div
+                            id="billsChart"
+                            class="chart-bar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="chart-item">
+
+                    <div class="chart-label">
+
+                        <span>Other</span>
+
+                        <span id="otherExpense">
+                            ₹0
+                        </span>
+
+                    </div>
+
+                    <div class="chart-bar-background">
+
+                        <div
+                            id="otherChart"
+                            class="chart-bar"
+                        ></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- AI ASSISTANT -->
+
+        <section class="ai-section">
+
+            <h2>
+                🤖 AI Finance Assistant
+            </h2>
+
+
+            <p class="ai-description">
+
+                Ask FinTrack for simple advice about
+                your spending, savings, or budget.
+
+            </p>
+
+
+            <div class="ai-input-container">
+
+                <input
+                    type="text"
+                    id="aiQuestion"
+                    placeholder="Example: How can I save more money?"
+                >
+
+                <button onclick="askAI()">
+                    Ask AI
+                </button>
+
+            </div>
+
+
+            <div class="ai-example-questions">
+
+                <p>
+                    Try asking:
+                </p>
+
+
+                <button
+                    onclick="useQuestion('How can I save more money?')"
+                >
+                    How can I save more money?
+                </button>
+
+
+                <button
+                    onclick="useQuestion('Where am I spending the most?')"
+                >
+                    Where am I spending the most?
+                </button>
+
+
+                <button
+                    onclick="useQuestion('Am I staying within my budget?')"
+                >
+                    Am I staying within my budget?
+                </button>
+
+            </div>
+
+
+            <div
+                id="aiResponse"
+                class="ai-response"
+            >
+
+                <strong>
+                    AI Assistant:
+                </strong>
+
+                <p>
+                    Ask me a question about your finances
+                    and I'll help you.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- RECENT EXPENSES -->
+
+        <section class="recent-section">
+
+            <h2>
+                Recent Expenses
+            </h2>
+
+
+            <div id="recentExpenses">
+
+                <p class="empty-message">
+                    No expenses added yet.
+                </p>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- FEATURES -->
+
+        <section class="features-section">
+
+            <h2>
+                FinTrack Features
+            </h2>
+
+
+            <div class="features">
+
+
+                <div class="feature-card">
+
+                    <h3>
+                        💳 Track Expenses
+                    </h3>
+
+                    <p>
+                        Record and monitor your daily expenses.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <h3>
+                        📊 Manage Budget
+                    </h3>
+
+                    <p>
+                        Set budgets and monitor your spending.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <h3>
+                        🤖 AI Insights
+                    </h3>
+
+                    <p>
+                        Get simple financial suggestions.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <h3>
+                        🔐 Secure
+                    </h3>
+
+                    <p>
+                        Designed to keep your financial
+                        information protected.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- FOOTER -->
+
+        <footer>
 
             <p>
-                Ask me a question about your finances
-                and I'll help you.
+                © 2026 FinTrack |
+                Personal Finance & AI Assistant
             </p>
 
-        </div>
+        </footer>
 
-    </section>
-
-
-    <!-- RECENT EXPENSES -->
-
-    <section class="recent-section">
-
-        <h2>Recent Expenses</h2>
-
-        <div id="recentExpenses">
-
-            <p class="empty-message">
-                No expenses added yet.
-            </p>
-
-        </div>
-
-    </section>
-
-
-    <!-- FEATURES -->
-
-    <section class="features-section">
-
-        <h2>FinTrack Features</h2>
-
-        <div class="features">
-
-            <div class="feature-card">
-
-                <h3>💳 Track Expenses</h3>
-
-                <p>
-                    Record and monitor your daily expenses.
-                </p>
-
-            </div>
-
-
-            <div class="feature-card">
-
-                <h3>📊 Manage Budget</h3>
-
-                <p>
-                    Set budgets and monitor your spending.
-                </p>
-
-            </div>
-
-
-            <div class="feature-card">
-
-                <h3>🤖 AI Insights</h3>
-
-                <p>
-                    Get simple financial suggestions.
-                </p>
-
-            </div>
-
-
-            <div class="feature-card">
-
-                <h3>🔐 Secure</h3>
-
-                <p>
-                    Designed to keep your financial
-                    information protected.
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- FOOTER -->
-
-    <footer>
-
-        <p>
-            © 2026 FinTrack |
-            Personal Finance & AI Assistant
-        </p>
-
-    </footer>
+    </div>
 
 
     <script src="script.js"></script>

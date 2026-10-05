@@ -1,3 +1,191 @@
+/* ================= AUTHENTICATION ================= */
+
+function showSignup() {
+
+    document
+        .getElementById("loginForm")
+        .classList.add("hidden");
+
+    document
+        .getElementById("signupForm")
+        .classList.remove("hidden");
+
+}
+
+
+function showLogin() {
+
+    document
+        .getElementById("signupForm")
+        .classList.add("hidden");
+
+    document
+        .getElementById("loginForm")
+        .classList.remove("hidden");
+
+}
+
+
+/* DEMO LOGIN */
+
+function demoLogin() {
+
+    const email =
+        document
+            .getElementById("loginEmail")
+            .value
+            .trim();
+
+    const password =
+        document
+            .getElementById("loginPassword")
+            .value;
+
+
+    if (email === "" || password === "") {
+
+        alert(
+            "Please enter your email and password."
+        );
+
+        return;
+
+    }
+
+
+    document
+        .getElementById("authPage")
+        .classList.add("hidden");
+
+    document
+        .getElementById("mainApp")
+        .classList.remove("hidden");
+
+}
+
+
+/* DEMO SIGN UP */
+
+function demoSignup() {
+
+    const name =
+        document
+            .getElementById("signupName")
+            .value
+            .trim();
+
+    const email =
+        document
+            .getElementById("signupEmail")
+            .value
+            .trim();
+
+    const password =
+        document
+            .getElementById("signupPassword")
+            .value;
+
+    const confirmPassword =
+        document
+            .getElementById("confirmPassword")
+            .value;
+
+
+    if (
+        name === "" ||
+        email === "" ||
+        password === "" ||
+        confirmPassword === ""
+    ) {
+
+        alert(
+            "Please fill in all fields."
+        );
+
+        return;
+
+    }
+
+
+    if (password !== confirmPassword) {
+
+        alert(
+            "Passwords do not match."
+        );
+
+        return;
+
+    }
+
+
+    if (password.length < 6) {
+
+        alert(
+            "Password should contain at least 6 characters."
+        );
+
+        return;
+
+    }
+
+
+    alert(
+        "Account created successfully! You can now continue to FinTrack."
+    );
+
+
+    showLogin();
+
+}
+
+
+/* SHOW / HIDE PASSWORD */
+
+function togglePassword(
+    inputId,
+    button
+) {
+
+    const input =
+        document.getElementById(inputId);
+
+
+    if (input.type === "password") {
+
+        input.type = "text";
+
+        button.textContent = "🙈";
+
+    }
+
+    else {
+
+        input.type = "password";
+
+        button.textContent = "👁️";
+
+    }
+
+}
+
+
+/* LOGOUT */
+
+function logout() {
+
+    document
+        .getElementById("mainApp")
+        .classList.add("hidden");
+
+    document
+        .getElementById("authPage")
+        .classList.remove("hidden");
+
+}
+
+
+/* ================= FINTRACK ================= */
+
 let totalIncome = 0;
 
 let totalExpenses = 0;
@@ -62,7 +250,9 @@ function addIncome() {
 
     if (amount <= 0) {
 
-        alert("Please enter a valid income amount.");
+        alert(
+            "Please enter a valid income amount."
+        );
 
         return;
 
@@ -87,10 +277,14 @@ function addIncome() {
 function addExpense() {
 
     const amountInput =
-        document.getElementById("expenseAmount");
+        document.getElementById(
+            "expenseAmount"
+        );
 
     const categoryInput =
-        document.getElementById("expenseCategory");
+        document.getElementById(
+            "expenseCategory"
+        );
 
 
     const amount =
@@ -102,7 +296,9 @@ function addExpense() {
 
     if (amount <= 0) {
 
-        alert("Please enter a valid expense amount.");
+        alert(
+            "Please enter a valid expense amount."
+        );
 
         return;
 
@@ -121,7 +317,8 @@ function addExpense() {
 
         category: category,
 
-        date: new Date().toLocaleDateString()
+        date: new Date()
+            .toLocaleDateString()
 
     });
 
@@ -142,29 +339,38 @@ function addExpense() {
 }
 
 
-/* UPDATE DASHBOARD */
+/* DASHBOARD */
 
 function updateDashboard() {
 
-    document.getElementById("totalIncome").textContent =
-        "₹" + totalIncome.toLocaleString("en-IN");
+    document
+        .getElementById("totalIncome")
+        .textContent =
+        "₹" +
+        totalIncome.toLocaleString("en-IN");
 
 
-    document.getElementById("totalExpenses").textContent =
-        "₹" + totalExpenses.toLocaleString("en-IN");
+    document
+        .getElementById("totalExpenses")
+        .textContent =
+        "₹" +
+        totalExpenses.toLocaleString("en-IN");
 
 
     const balance =
         totalIncome - totalExpenses;
 
 
-    document.getElementById("balance").textContent =
-        "₹" + balance.toLocaleString("en-IN");
+    document
+        .getElementById("balance")
+        .textContent =
+        "₹" +
+        balance.toLocaleString("en-IN");
 
 }
 
 
-/* UPDATE BUDGET */
+/* BUDGET */
 
 function updateBudget() {
 
@@ -205,8 +411,6 @@ function updateBudget() {
 }
 
 
-/* SINGLE BUDGET */
-
 function updateSingleBudget(
     category,
     textId,
@@ -227,19 +431,23 @@ function updateSingleBudget(
         );
 
 
-    document.getElementById(textId).textContent =
+    document
+        .getElementById(textId)
+        .textContent =
         "₹" +
         spent.toLocaleString("en-IN") +
         " / ₹" +
         budget.toLocaleString("en-IN");
 
 
-    document.getElementById(progressId).style.width =
-        percentage + "%";
-
-
     const progress =
-        document.getElementById(progressId);
+        document.getElementById(
+            progressId
+        );
+
+
+    progress.style.width =
+        percentage + "%";
 
 
     if (spent > budget) {
@@ -266,71 +474,85 @@ function updateSingleBudget(
 }
 
 
-/* EXPENSE CHART */
+/* EXPENSE BREAKDOWN */
 
 function updateExpenseChart() {
 
-    const categories =
-        [
-            "Food",
-            "Transport",
-            "Shopping",
-            "Bills",
-            "Other"
-        ];
+    const categories = [
+
+        "Food",
+
+        "Transport",
+
+        "Shopping",
+
+        "Bills",
+
+        "Other"
+
+    ];
 
 
     let maxExpense = 0;
 
 
-    categories.forEach(function(category) {
+    categories.forEach(
+        function(category) {
 
-        if (
-            categoryExpenses[category]
-            > maxExpense
-        ) {
+            if (
+                categoryExpenses[category]
+                > maxExpense
+            ) {
 
-            maxExpense =
-                categoryExpenses[category];
+                maxExpense =
+                    categoryExpenses[category];
+
+            }
 
         }
-
-    });
-
-
-    categories.forEach(function(category) {
-
-        const amount =
-            categoryExpenses[category];
+    );
 
 
-        const percentage =
-            maxExpense === 0
-                ? 0
-                : (amount / maxExpense) * 100;
+    categories.forEach(
+        function(category) {
+
+            const amount =
+                categoryExpenses[category];
 
 
-        const id =
-            category.toLowerCase()
+            const percentage =
+                maxExpense === 0
+                    ? 0
+                    : (
+                        amount /
+                        maxExpense
+                    ) * 100;
+
+
+            const id =
+                category.toLowerCase()
                 + "Chart";
 
 
-        const expenseId =
-            category.toLowerCase()
+            const expenseId =
+                category.toLowerCase()
                 + "Expense";
 
 
-        document.getElementById(id)
-            .style.width =
-            percentage + "%";
+            document
+                .getElementById(id)
+                .style.width =
+                percentage + "%";
 
 
-        document.getElementById(expenseId)
-            .textContent =
-            "₹" +
-            amount.toLocaleString("en-IN");
+            document
+                .getElementById(expenseId)
+                .textContent =
+                "₹" +
+                amount.toLocaleString("en-IN");
 
-    });
+        }
+    );
 
 }
 
@@ -345,12 +567,16 @@ function updateRecentExpenses() {
         );
 
 
-    if (expenseHistory.length === 0) {
+    if (
+        expenseHistory.length === 0
+    ) {
 
         container.innerHTML = `
+
             <p class="empty-message">
                 No expenses added yet.
             </p>
+
         `;
 
         return;
@@ -367,41 +593,53 @@ function updateRecentExpenses() {
     container.innerHTML = "";
 
 
-    recent.forEach(function(expense) {
+    recent.forEach(
+        function(expense) {
 
-        const row =
-            document.createElement("div");
+            const row =
+                document.createElement(
+                    "div"
+                );
 
 
-        row.className =
-            "expense-row";
+            row.className =
+                "expense-row";
 
 
-        row.innerHTML = `
+            row.innerHTML = `
 
-            <span>
+                <span>
+
+                    <strong>
+                        ${expense.category}
+                    </strong>
+
+                    <br>
+
+                    ${expense.date}
+
+                </span>
+
+
                 <strong>
-                    ${expense.category}
+
+                    ₹${expense.amount
+                        .toLocaleString("en-IN")}
+
                 </strong>
-                <br>
-                ${expense.date}
-            </span>
 
-            <strong>
-                ₹${expense.amount.toLocaleString("en-IN")}
-            </strong>
-
-        `;
+            `;
 
 
-        container.appendChild(row);
+            container.appendChild(row);
 
-    });
+        }
+    );
 
 }
 
 
-/* SMART FINANCIAL WARNINGS */
+/* SMART WARNINGS */
 
 function updateFinancialWarnings() {
 
@@ -414,8 +652,6 @@ function updateFinancialWarnings() {
     const warnings = [];
 
 
-    /* No data */
-
     if (
         totalIncome === 0 &&
         totalExpenses === 0
@@ -425,7 +661,8 @@ function updateFinancialWarnings() {
 
             type: "success",
 
-            title: "💚 You're doing well!",
+            title:
+                "💚 You're doing well!",
 
             message:
                 "Add your income and expenses to receive personalized financial warnings."
@@ -434,8 +671,6 @@ function updateFinancialWarnings() {
 
     }
 
-
-    /* Expenses higher than income */
 
     if (
         totalExpenses > totalIncome &&
@@ -446,7 +681,8 @@ function updateFinancialWarnings() {
 
             type: "danger",
 
-            title: "🚨 Spending Alert",
+            title:
+                "🚨 Spending Alert",
 
             message:
                 "Your expenses are currently higher than your income. Try reducing non-essential spending."
@@ -456,12 +692,11 @@ function updateFinancialWarnings() {
     }
 
 
-    /* Balance warning */
-
     if (
         totalIncome > 0 &&
         totalExpenses > 0 &&
-        totalExpenses >= totalIncome * 0.8 &&
+        totalExpenses >=
+        totalIncome * 0.8 &&
         totalExpenses <= totalIncome
     ) {
 
@@ -469,7 +704,8 @@ function updateFinancialWarnings() {
 
             type: "warning-box",
 
-            title: "⚠️ High Spending",
+            title:
+                "⚠️ High Spending",
 
             message:
                 "You have already used more than 80% of your income. Be careful with additional spending."
@@ -478,8 +714,6 @@ function updateFinancialWarnings() {
 
     }
 
-
-    /* Category budget warnings */
 
     Object.keys(budgets).forEach(
         function(category) {
@@ -509,7 +743,7 @@ function updateFinancialWarnings() {
                         (
                             spent - budget
                         ).toLocaleString("en-IN") +
-                        ". Consider reducing spending in this category."
+                        "."
 
                 });
 
@@ -546,29 +780,27 @@ function updateFinancialWarnings() {
     );
 
 
-    /* Good savings */
-
     if (
         totalIncome > 0 &&
         totalExpenses > 0 &&
-        totalExpenses < totalIncome * 0.5
+        totalExpenses <
+        totalIncome * 0.5
     ) {
 
         warnings.push({
 
             type: "success",
 
-            title: "💰 Good Savings",
+            title:
+                "💰 Good Savings",
 
             message:
-                "Your current expenses are less than 50% of your income. You're maintaining a healthy spending level."
+                "Your current expenses are less than 50% of your income."
 
         });
 
     }
 
-
-    /* Remaining balance */
 
     if (
         totalIncome > totalExpenses &&
@@ -576,14 +808,16 @@ function updateFinancialWarnings() {
     ) {
 
         const remaining =
-            totalIncome - totalExpenses;
+            totalIncome -
+            totalExpenses;
 
 
         warnings.push({
 
             type: "info",
 
-            title: "💡 Available Balance",
+            title:
+                "💡 Available Balance",
 
             message:
                 "You currently have ₹" +
@@ -598,52 +832,54 @@ function updateFinancialWarnings() {
     container.innerHTML = "";
 
 
-    warnings.forEach(function(warning) {
+    warnings.forEach(
+        function(warning) {
 
-        const div =
-            document.createElement("div");
-
-
-        div.className =
-            "warning " +
-            warning.type;
+            const div =
+                document.createElement(
+                    "div"
+                );
 
 
-        div.innerHTML = `
-
-            <strong>
-                ${warning.title}
-            </strong>
-
-            <p>
-                ${warning.message}
-            </p>
-
-        `;
+            div.className =
+                "warning " +
+                warning.type;
 
 
-        container.appendChild(div);
+            div.innerHTML = `
 
-    });
+                <strong>
+                    ${warning.title}
+                </strong>
+
+                <p>
+                    ${warning.message}
+                </p>
+
+            `;
+
+
+            container.appendChild(div);
+
+        }
+    );
 
 }
 
 
-/* AI EXAMPLE QUESTION */
+/* ================= AI ================= */
 
 function useQuestion(question) {
 
-    document.getElementById(
-        "aiQuestion"
-    ).value = question;
+    document
+        .getElementById("aiQuestion")
+        .value = question;
 
 
     askAI();
 
 }
 
-
-/* AI ASSISTANT */
 
 function askAI() {
 
@@ -684,8 +920,6 @@ function askAI() {
     }
 
 
-    /* SAVING */
-
     if (
         question.includes("save") ||
         question.includes("saving")
@@ -704,8 +938,7 @@ function askAI() {
             </p>
 
             <p>
-                Based on your current expenses,
-                focus on reducing unnecessary spending
+                Focus on reducing unnecessary spending
                 in your highest-spending category.
             </p>
 
@@ -715,8 +948,6 @@ function askAI() {
 
     }
 
-
-    /* MOST SPENDING */
 
     if (
         question.includes("most") ||
@@ -729,22 +960,26 @@ function askAI() {
 
 
         Object.keys(categoryExpenses)
-            .forEach(function(category) {
+            .forEach(
+                function(category) {
 
-                if (
-                    categoryExpenses[category]
-                    > highestAmount
-                ) {
+                    if (
+                        categoryExpenses[category]
+                        > highestAmount
+                    ) {
 
-                    highestAmount =
-                        categoryExpenses[category];
+                        highestAmount =
+                            categoryExpenses[
+                                category
+                            ];
 
-                    highestCategory =
-                        category;
+                        highestCategory =
+                            category;
+
+                    }
 
                 }
-
-            });
+            );
 
 
         if (highestAmount === 0) {
@@ -757,8 +992,6 @@ function askAI() {
 
                 <p>
                     You haven't added any expenses yet.
-                    Add some expenses and I can analyze
-                    your spending.
                 </p>
 
             `;
@@ -779,7 +1012,8 @@ function askAI() {
                 <strong>
                     ${highestCategory}
                 </strong>
-                with ₹${highestAmount.toLocaleString("en-IN")}.
+                with ₹${highestAmount
+                    .toLocaleString("en-IN")}.
             </p>
 
             <p>
@@ -794,15 +1028,14 @@ function askAI() {
     }
 
 
-    /* BUDGET */
-
     if (
         question.includes("budget") ||
         question.includes("within")
     ) {
 
         const balance =
-            totalIncome - totalExpenses;
+            totalIncome -
+            totalExpenses;
 
 
         response.innerHTML = `
@@ -812,24 +1045,19 @@ function askAI() {
             </strong>
 
             <p>
-                You have recorded
+                Your total recorded expenses are
                 <strong>
-                    ₹${totalExpenses.toLocaleString("en-IN")}
-                </strong>
-                in expenses.
+                    ₹${totalExpenses
+                        .toLocaleString("en-IN")}
+                </strong>.
             </p>
 
             <p>
                 Your current balance is
                 <strong>
-                    ₹${balance.toLocaleString("en-IN")}
+                    ₹${balance
+                        .toLocaleString("en-IN")}
                 </strong>.
-            </p>
-
-            <p>
-                Check the Smart Financial Warnings
-                section above for categories that are
-                close to or above their budgets.
             </p>
 
         `;
@@ -838,8 +1066,6 @@ function askAI() {
 
     }
 
-
-    /* EXPENSE */
 
     if (
         question.includes("expense") ||
@@ -855,13 +1081,9 @@ function askAI() {
             <p>
                 Your total recorded expenses are
                 <strong>
-                    ₹${totalExpenses.toLocaleString("en-IN")}
+                    ₹${totalExpenses
+                        .toLocaleString("en-IN")}
                 </strong>.
-            </p>
-
-            <p>
-                Keep monitoring your highest-spending
-                categories to control unnecessary expenses.
             </p>
 
         `;
@@ -870,8 +1092,6 @@ function askAI() {
 
     }
 
-
-    /* DEFAULT */
 
     response.innerHTML = `
 
@@ -908,7 +1128,7 @@ function askAI() {
 }
 
 
-/* INITIAL UPDATE */
+/* ================= INITIALIZATION ================= */
 
 updateDashboard();
 
