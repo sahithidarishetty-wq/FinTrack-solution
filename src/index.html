@@ -2,94 +2,103 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>FinTrack - Personal Finance Manager</title>
+    <title>FinTrack - Personal Finance & AI Assistant</title>
 
     <link rel="stylesheet" href="style.css">
-
 </head>
 
-
 <body>
-
 
     <!-- Header -->
 
     <header>
 
-        <h1>FinTrack</h1>
+        <div class="logo">
+            FinTrack
+        </div>
 
-        <p>Personal Finance & AI Assistant</p>
+        <div class="tagline">
+            Personal Finance & AI Assistant
+        </div>
 
     </header>
 
 
+    <!-- Welcome Section -->
+
+    <section class="welcome">
+
+        <h1>
+            Take Control of Your Money
+        </h1>
+
+        <p>
+            Track your income, manage expenses,
+            set budgets and get smart financial insights.
+        </p>
+
+        <button onclick="startTracking()">
+            Start Tracking
+        </button>
+
+    </section>
+
 
     <main>
-
-
-        <!-- Welcome Section -->
-
-        <section class="welcome">
-
-            <h2>Welcome to FinTrack</h2>
-
-            <p>
-                Track your income, expenses and savings
-                in one simple place.
-            </p>
-
-            <button onclick="startTracking()">
-                Start Tracking
-            </button>
-
-        </section>
-
 
 
         <!-- Dashboard -->
 
         <section class="dashboard">
 
+            <h2>
+                Dashboard
+            </h2>
 
-            <div class="card">
+            <div class="dashboard-cards">
 
-                <h3>Total Income</h3>
+                <div class="card income-card">
 
-                <p id="totalIncome">
-                    ₹0
-                </p>
+                    <h3>
+                        Total Income
+                    </h3>
+
+                    <p id="totalIncome">
+                        ₹0
+                    </p>
+
+                </div>
+
+
+                <div class="card expense-card">
+
+                    <h3>
+                        Total Expenses
+                    </h3>
+
+                    <p id="totalExpenses">
+                        ₹0
+                    </p>
+
+                </div>
+
+
+                <div class="card balance-card">
+
+                    <h3>
+                        Balance
+                    </h3>
+
+                    <p id="balance">
+                        ₹0
+                    </p>
+
+                </div>
 
             </div>
-
-
-
-            <div class="card">
-
-                <h3>Total Expenses</h3>
-
-                <p id="totalExpenses">
-                    ₹0
-                </p>
-
-            </div>
-
-
-
-            <div class="card">
-
-                <h3>Balance</h3>
-
-                <p id="savings">
-                    ₹0
-                </p>
-
-            </div>
-
 
         </section>
 
@@ -97,20 +106,19 @@
 
         <!-- Add Income -->
 
-        <section class="expense-section">
+        <section class="form-section">
 
-            <h2>Add Income</h2>
+            <h2>
+                Add Income
+            </h2>
 
-
-            <div class="expense-form">
-
+            <div class="form-container">
 
                 <input
                     type="text"
-                    id="incomeName"
-                    placeholder="Income source (e.g. Salary)"
+                    id="incomeSource"
+                    placeholder="Income source"
                 >
-
 
                 <input
                     type="number"
@@ -118,11 +126,9 @@
                     placeholder="Amount"
                 >
 
-
                 <button onclick="addIncome()">
                     Add Income
                 </button>
-
 
             </div>
 
@@ -132,20 +138,19 @@
 
         <!-- Add Expense -->
 
-        <section class="expense-section">
+        <section class="form-section">
 
-            <h2>Add an Expense</h2>
+            <h2>
+                Add Expense
+            </h2>
 
-
-            <div class="expense-form">
-
+            <div class="form-container">
 
                 <input
                     type="text"
                     id="expenseName"
-                    placeholder="Expense name (e.g. Food)"
+                    placeholder="Expense name"
                 >
-
 
                 <input
                     type="number"
@@ -183,7 +188,6 @@
                     Add Expense
                 </button>
 
-
             </div>
 
         </section>
@@ -194,33 +198,33 @@
 
         <section class="budget-section">
 
-
-            <h2>Monthly Budget</h2>
+            <h2>
+                Monthly Budget
+            </h2>
 
 
             <div class="budget-list">
 
 
-                <!-- Food -->
-
                 <div class="budget-item">
 
-                    <div class="budget-info">
+                    <div class="budget-title">
 
-                        <h3>🍔 Food</h3>
+                        <span>
+                            🍔 Food
+                        </span>
 
-                        <p id="foodBudgetText">
-                            ₹0 / ₹2,000
-                        </p>
+                        <span>
+                            ₹2,000
+                        </span>
 
                     </div>
-
 
                     <div class="budget-bar">
 
                         <div
                             class="budget-progress"
-                            id="foodProgress"
+                            id="foodBudget"
                             style="width: 0%;"
                         ></div>
 
@@ -230,26 +234,25 @@
 
 
 
-                <!-- Transport -->
-
                 <div class="budget-item">
 
-                    <div class="budget-info">
+                    <div class="budget-title">
 
-                        <h3>🚌 Transport</h3>
+                        <span>
+                            🚌 Transport
+                        </span>
 
-                        <p id="transportBudgetText">
-                            ₹0 / ₹1,500
-                        </p>
+                        <span>
+                            ₹1,500
+                        </span>
 
                     </div>
-
 
                     <div class="budget-bar">
 
                         <div
                             class="budget-progress"
-                            id="transportProgress"
+                            id="transportBudget"
                             style="width: 0%;"
                         ></div>
 
@@ -259,26 +262,25 @@
 
 
 
-                <!-- Shopping -->
-
                 <div class="budget-item">
 
-                    <div class="budget-info">
+                    <div class="budget-title">
 
-                        <h3>🛍️ Shopping</h3>
+                        <span>
+                            🛍️ Shopping
+                        </span>
 
-                        <p id="shoppingBudgetText">
-                            ₹0 / ₹3,000
-                        </p>
+                        <span>
+                            ₹3,000
+                        </span>
 
                     </div>
-
 
                     <div class="budget-bar">
 
                         <div
                             class="budget-progress"
-                            id="shoppingProgress"
+                            id="shoppingBudget"
                             style="width: 0%;"
                         ></div>
 
@@ -288,26 +290,25 @@
 
 
 
-                <!-- Bills -->
-
                 <div class="budget-item">
 
-                    <div class="budget-info">
+                    <div class="budget-title">
 
-                        <h3>💡 Bills</h3>
+                        <span>
+                            💡 Bills
+                        </span>
 
-                        <p id="billsBudgetText">
-                            ₹0 / ₹2,500
-                        </p>
+                        <span>
+                            ₹2,500
+                        </span>
 
                     </div>
-
 
                     <div class="budget-bar">
 
                         <div
                             class="budget-progress"
-                            id="billsProgress"
+                            id="billsBudget"
                             style="width: 0%;"
                         ></div>
 
@@ -317,33 +318,31 @@
 
 
 
-                <!-- Other -->
-
                 <div class="budget-item">
 
-                    <div class="budget-info">
+                    <div class="budget-title">
 
-                        <h3>📦 Other</h3>
+                        <span>
+                            📦 Other
+                        </span>
 
-                        <p id="otherBudgetText">
-                            ₹0 / ₹2,000
-                        </p>
+                        <span>
+                            ₹2,000
+                        </span>
 
                     </div>
-
 
                     <div class="budget-bar">
 
                         <div
                             class="budget-progress"
-                            id="otherProgress"
+                            id="otherBudget"
                             style="width: 0%;"
                         ></div>
 
                     </div>
 
                 </div>
-
 
             </div>
 
@@ -351,13 +350,13 @@
 
 
 
-        <!-- Expense Chart -->
+        <!-- Expense Breakdown -->
 
         <section class="chart-section">
 
-
-            <h2>Expense Breakdown</h2>
-
+            <h2>
+                Expense Breakdown
+            </h2>
 
             <p class="chart-description">
                 See where your money is going.
@@ -369,17 +368,17 @@
 
                 <div class="chart-row">
 
-
                     <div class="chart-label">
 
-                        <span>🍔 Food</span>
+                        <span>
+                            🍔 Food
+                        </span>
 
                         <span id="foodChartAmount">
                             ₹0
                         </span>
 
                     </div>
-
 
                     <div class="chart-bar">
 
@@ -391,24 +390,23 @@
 
                     </div>
 
-
                 </div>
 
 
 
                 <div class="chart-row">
 
-
                     <div class="chart-label">
 
-                        <span>🚌 Transport</span>
+                        <span>
+                            🚌 Transport
+                        </span>
 
                         <span id="transportChartAmount">
                             ₹0
                         </span>
 
                     </div>
-
 
                     <div class="chart-bar">
 
@@ -420,24 +418,23 @@
 
                     </div>
 
-
                 </div>
 
 
 
                 <div class="chart-row">
 
-
                     <div class="chart-label">
 
-                        <span>🛍️ Shopping</span>
+                        <span>
+                            🛍️ Shopping
+                        </span>
 
                         <span id="shoppingChartAmount">
                             ₹0
                         </span>
 
                     </div>
-
 
                     <div class="chart-bar">
 
@@ -449,24 +446,23 @@
 
                     </div>
 
-
                 </div>
 
 
 
                 <div class="chart-row">
 
-
                     <div class="chart-label">
 
-                        <span>💡 Bills</span>
+                        <span>
+                            💡 Bills
+                        </span>
 
                         <span id="billsChartAmount">
                             ₹0
                         </span>
 
                     </div>
-
 
                     <div class="chart-bar">
 
@@ -478,24 +474,23 @@
 
                     </div>
 
-
                 </div>
 
 
 
                 <div class="chart-row">
 
-
                     <div class="chart-label">
 
-                        <span>📦 Other</span>
+                        <span>
+                            📦 Other
+                        </span>
 
                         <span id="otherChartAmount">
                             ₹0
                         </span>
 
                     </div>
-
 
                     <div class="chart-bar">
 
@@ -506,7 +501,6 @@
                         ></div>
 
                     </div>
-
 
                 </div>
 
@@ -521,6 +515,84 @@
                 Add some expenses to see your spending breakdown.
             </div>
 
+        </section>
+
+
+
+        <!-- AI Finance Assistant -->
+
+        <section class="ai-section">
+
+            <h2>
+                🤖 AI Finance Assistant
+            </h2>
+
+            <p class="ai-description">
+                Ask FinTrack for simple advice about
+                your spending, savings, or budget.
+            </p>
+
+
+            <div class="ai-input-container">
+
+                <input
+                    type="text"
+                    id="aiQuestion"
+                    placeholder="Example: How can I save more money?"
+                >
+
+                <button onclick="askAI()">
+                    Ask AI
+                </button>
+
+            </div>
+
+
+            <div class="ai-example-questions">
+
+                <p>
+                    Try asking:
+                </p>
+
+
+                <button
+                    onclick="useQuestion('How can I save more money?')"
+                >
+                    How can I save more money?
+                </button>
+
+
+                <button
+                    onclick="useQuestion('Where am I spending the most?')"
+                >
+                    Where am I spending the most?
+                </button>
+
+
+                <button
+                    onclick="useQuestion('Am I staying within my budget?')"
+                >
+                    Am I staying within my budget?
+                </button>
+
+            </div>
+
+
+            <div
+                id="aiResponse"
+                class="ai-response"
+            >
+
+                <strong>
+                    AI Assistant:
+                </strong>
+
+                <p>
+                    Ask me a question about your finances
+                    and I'll help you.
+                </p>
+
+            </div>
 
         </section>
 
@@ -528,11 +600,11 @@
 
         <!-- Recent Expenses -->
 
-        <section class="expense-list-section">
+        <section class="recent-section">
 
-
-            <h2>Recent Expenses</h2>
-
+            <h2>
+                Recent Expenses
+            </h2>
 
             <div id="expenseList">
 
@@ -542,28 +614,34 @@
 
             </div>
 
-
         </section>
 
 
 
         <!-- Features -->
 
-        <section class="features">
+        <section class="features-section">
+
+            <h2>
+                Features
+            </h2>
 
 
-            <h2>What FinTrack Can Do</h2>
-
-
-            <div class="feature-list">
+            <div class="features">
 
 
                 <div class="feature">
 
-                    <h3>💰 Track Expenses</h3>
+                    <div class="feature-icon">
+                        💰
+                    </div>
+
+                    <h3>
+                        Track Expenses
+                    </h3>
 
                     <p>
-                        Record and monitor your daily spending.
+                        Easily record and monitor your daily spending.
                     </p>
 
                 </div>
@@ -572,11 +650,16 @@
 
                 <div class="feature">
 
-                    <h3>📊 Manage Budget</h3>
+                    <div class="feature-icon">
+                        📊
+                    </div>
+
+                    <h3>
+                        Manage Budget
+                    </h3>
 
                     <p>
-                        Set budgets and keep your spending
-                        under control.
+                        Set budgets and keep your spending under control.
                     </p>
 
                 </div>
@@ -585,11 +668,16 @@
 
                 <div class="feature">
 
-                    <h3>🤖 AI Insights</h3>
+                    <div class="feature-icon">
+                        🤖
+                    </div>
+
+                    <h3>
+                        AI Insights
+                    </h3>
 
                     <p>
-                        Get simple suggestions to improve
-                        your financial habits.
+                        Get smart suggestions based on your spending habits.
                     </p>
 
                 </div>
@@ -598,10 +686,16 @@
 
                 <div class="feature">
 
-                    <h3>🔐 Secure</h3>
+                    <div class="feature-icon">
+                        🔐
+                    </div>
+
+                    <h3>
+                        Secure
+                    </h3>
 
                     <p>
-                        Keep your financial information protected.
+                        Your financial information is designed to be protected.
                     </p>
 
                 </div>
@@ -625,7 +719,6 @@
         </p>
 
     </footer>
-
 
 
     <script src="script.js"></script>

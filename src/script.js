@@ -1,12 +1,7 @@
-// Starting values
-
 let totalIncome = 0;
 
 let totalExpenses = 0;
 
-
-
-// Monthly budgets
 
 const budgets = {
 
@@ -23,9 +18,6 @@ const budgets = {
 };
 
 
-
-// Current spending by category
-
 const categoryExpenses = {
 
     Food: 0,
@@ -41,158 +33,121 @@ const categoryExpenses = {
 };
 
 
-
-// Start Tracking
+/* Start Tracking */
 
 function startTracking() {
 
-    alert(
-        "Welcome to FinTrack! Let's start tracking your finances."
-    );
+    document
+        .querySelector(".dashboard")
+        .scrollIntoView({
+            behavior: "smooth"
+        });
 
 }
 
 
-
-// Add Income
+/* Add Income */
 
 function addIncome() {
 
-    const incomeName =
-        document.getElementById("incomeName").value;
+    const source =
+        document
+            .getElementById("incomeSource")
+            .value
+            .trim();
 
-    const incomeAmount =
+    const amount =
         Number(
-            document.getElementById("incomeAmount").value
+            document
+                .getElementById("incomeAmount")
+                .value
         );
 
 
-    // Validate input
+    if (source === "") {
 
-    if (
-        incomeName === "" ||
-        incomeAmount <= 0
-    ) {
-
-        alert(
-            "Please enter a valid income source and amount."
-        );
+        alert("Please enter the income source.");
 
         return;
+
     }
 
 
-    // Add income
+    if (amount <= 0) {
 
-    totalIncome =
-        totalIncome + incomeAmount;
+        alert("Please enter a valid income amount.");
 
+        return;
 
-    // Update dashboard
-
-    document.getElementById(
-        "totalIncome"
-    ).textContent =
-        "₹" +
-        totalIncome.toLocaleString("en-IN");
+    }
 
 
-    // Update balance
+    totalIncome += amount;
+
+
+    document
+        .getElementById("incomeSource")
+        .value = "";
+
+
+    document
+        .getElementById("incomeAmount")
+        .value = "";
+
 
     updateBalance();
-
-
-    // Clear inputs
-
-    document.getElementById(
-        "incomeName"
-    ).value = "";
-
-
-    document.getElementById(
-        "incomeAmount"
-    ).value = "";
-
-
-    alert(
-        "Income added successfully!"
-    );
 
 }
 
 
-
-// Add Expense
+/* Add Expense */
 
 function addExpense() {
 
-    const expenseName =
-        document.getElementById("expenseName").value;
+    const name =
+        document
+            .getElementById("expenseName")
+            .value
+            .trim();
 
-    const expenseAmount =
+
+    const amount =
         Number(
-            document.getElementById("expenseAmount").value
+            document
+                .getElementById("expenseAmount")
+                .value
         );
 
-    const expenseCategory =
-        document.getElementById("expenseCategory").value;
+
+    const category =
+        document
+            .getElementById("expenseCategory")
+            .value;
 
 
-    // Validate input
+    if (name === "") {
 
-    if (
-        expenseName === "" ||
-        expenseAmount <= 0
-    ) {
-
-        alert(
-            "Please enter a valid expense name and amount."
-        );
+        alert("Please enter the expense name.");
 
         return;
+
     }
 
 
-    // Add expense
+    if (amount <= 0) {
 
-    totalExpenses =
-        totalExpenses + expenseAmount;
+        alert("Please enter a valid expense amount.");
 
+        return;
 
-    // Update category spending
-
-    categoryExpenses[expenseCategory] =
-        categoryExpenses[expenseCategory] +
-        expenseAmount;
+    }
 
 
-    // Update dashboard
-
-    document.getElementById(
-        "totalExpenses"
-    ).textContent =
-        "₹" +
-        totalExpenses.toLocaleString("en-IN");
+    totalExpenses += amount;
 
 
-    // Update balance
+    categoryExpenses[category] += amount;
 
-    updateBalance();
-
-
-    // Update budget
-
-    updateBudget(
-        expenseCategory
-    );
-
-
-    // Update chart
-
-    updateExpenseChart();
-
-
-    // Get expense list
 
     const expenseList =
         document.getElementById(
@@ -200,10 +155,8 @@ function addExpense() {
         );
 
 
-    // Remove empty message
-
     const emptyMessage =
-        document.querySelector(
+        expenseList.querySelector(
             ".empty-message"
         );
 
@@ -214,8 +167,6 @@ function addExpense() {
 
     }
 
-
-    // Create expense item
 
     const expenseItem =
         document.createElement("div");
@@ -229,143 +180,140 @@ function addExpense() {
 
         <div>
 
-            <h3>
-                ${expenseName}
-            </h3>
+            <div class="expense-name">
+                ${name}
+            </div>
 
-            <p>
-                ${expenseCategory}
-            </p>
+            <div class="expense-category">
+                ${category}
+            </div>
 
         </div>
 
-
         <div class="expense-amount">
-
-            ₹${expenseAmount.toLocaleString("en-IN")}
-
+            -₹${amount.toLocaleString("en-IN")}
         </div>
 
     `;
 
 
-    // Add to list
-
-    expenseList.appendChild(
+    expenseList.prepend(
         expenseItem
     );
 
 
-    // Clear inputs
-
-    document.getElementById(
-        "expenseName"
-    ).value = "";
+    document
+        .getElementById("expenseName")
+        .value = "";
 
 
-    document.getElementById(
-        "expenseAmount"
-    ).value = "";
+    document
+        .getElementById("expenseAmount")
+        .value = "";
 
 
-    document.getElementById(
-        "expenseCategory"
-    ).value = "Food";
+    updateBalance();
+
+    updateBudget();
+
+    updateExpenseChart();
 
 }
 
 
-
-// Update Balance
+/* Update Dashboard */
 
 function updateBalance() {
+
+    document
+        .getElementById("totalIncome")
+        .textContent =
+        "₹" +
+        totalIncome.toLocaleString("en-IN");
+
+
+    document
+        .getElementById("totalExpenses")
+        .textContent =
+        "₹" +
+        totalExpenses.toLocaleString("en-IN");
+
 
     const balance =
         totalIncome - totalExpenses;
 
 
-    document.getElementById(
-        "savings"
-    ).textContent =
+    document
+        .getElementById("balance")
+        .textContent =
         "₹" +
         balance.toLocaleString("en-IN");
 
 }
 
 
+/* Update Budget */
 
-// Update Budget
+function updateBudget() {
 
-function updateBudget(category) {
+    const categories = [
 
-    const spent =
-        categoryExpenses[category];
+        "Food",
 
-    const budget =
-        budgets[category];
+        "Transport",
 
+        "Shopping",
 
-    const percentage =
-        Math.min(
-            (spent / budget) * 100,
-            100
-        );
+        "Bills",
 
+        "Other"
 
-    // Create IDs
-
-    const categoryId =
-        category.toLowerCase();
+    ];
 
 
-    const textElement =
-        document.getElementById(
-            categoryId + "BudgetText"
-        );
+    categories.forEach(
+        function(category) {
+
+            const amount =
+                categoryExpenses[category];
 
 
-    const progressElement =
-        document.getElementById(
-            categoryId + "Progress"
-        );
+            const budget =
+                budgets[category];
 
 
-    // Update text
-
-    textElement.textContent =
-        "₹" +
-        spent.toLocaleString("en-IN") +
-        " / ₹" +
-        budget.toLocaleString("en-IN");
+            let percentage =
+                (amount / budget) * 100;
 
 
-    // Update progress bar
+            if (percentage > 100) {
 
-    progressElement.style.width =
-        percentage + "%";
+                percentage = 100;
+
+            }
 
 
-    // Budget warning
+            const elementId =
+                category.toLowerCase() +
+                "Budget";
 
-    if (spent >= budget) {
 
-        progressElement.style.background =
-            "#d9534f";
+            const progress =
+                document.getElementById(
+                    elementId
+                );
 
-    }
 
-    else {
+            progress.style.width =
+                percentage + "%";
 
-        progressElement.style.background =
-            "#1f4e79";
-
-    }
+        }
+    );
 
 }
 
 
-
-// Update Expense Chart
+/* Update Expense Chart */
 
 function updateExpenseChart() {
 
@@ -383,8 +331,6 @@ function updateExpenseChart() {
 
     ];
 
-
-    // Find the highest expense
 
     let highestExpense = 0;
 
@@ -406,8 +352,6 @@ function updateExpenseChart() {
     );
 
 
-    // Update every category
-
     categories.forEach(
         function(category) {
 
@@ -427,18 +371,15 @@ function updateExpenseChart() {
 
             const amountElement =
                 document.getElementById(
-                    categoryId + "ChartAmount"
+                    categoryId +
+                    "ChartAmount"
                 );
 
-
-            // Update amount
 
             amountElement.textContent =
                 "₹" +
                 amount.toLocaleString("en-IN");
 
-
-            // Calculate chart percentage
 
             let percentage = 0;
 
@@ -446,12 +387,11 @@ function updateExpenseChart() {
             if (highestExpense > 0) {
 
                 percentage =
-                    (amount / highestExpense) * 100;
+                    (amount / highestExpense) *
+                    100;
 
             }
 
-
-            // Update chart
 
             chartElement.style.width =
                 percentage + "%";
@@ -459,8 +399,6 @@ function updateExpenseChart() {
         }
     );
 
-
-    // Update chart message
 
     const chartMessage =
         document.getElementById(
@@ -474,7 +412,6 @@ function updateExpenseChart() {
             "Add some expenses to see your spending breakdown.";
 
     }
-
     else {
 
         chartMessage.textContent =
@@ -485,7 +422,310 @@ function updateExpenseChart() {
 }
 
 
+/* AI Finance Assistant */
 
-// Initialize chart
+function useQuestion(question) {
+
+    const input =
+        document.getElementById(
+            "aiQuestion"
+        );
+
+
+    input.value =
+        question;
+
+
+    askAI();
+
+}
+
+
+function askAI() {
+
+    const input =
+        document.getElementById(
+            "aiQuestion"
+        );
+
+
+    const response =
+        document.getElementById(
+            "aiResponse"
+        );
+
+
+    const question =
+        input.value
+            .trim()
+            .toLowerCase();
+
+
+    if (question === "") {
+
+        response.innerHTML = `
+
+            <strong>
+                AI Assistant:
+            </strong>
+
+            <p>
+                Please enter a question first.
+            </p>
+
+        `;
+
+        return;
+
+    }
+
+
+    let answer = "";
+
+
+    /* Saving Question */
+
+    if (
+
+        question.includes("save") ||
+
+        question.includes("saving")
+
+    ) {
+
+        answer = `
+
+            <strong>
+                AI Assistant:
+            </strong>
+
+            <p>
+                Try following the 50-30-20 rule:
+                use 50% for needs, 30% for wants,
+                and try to save 20% of your income.
+            </p>
+
+            <p>
+                You can also review your Expense
+                Breakdown and reduce unnecessary spending.
+            </p>
+
+        `;
+
+    }
+
+
+    /* Highest Spending Question */
+
+    else if (
+
+        question.includes("most") ||
+
+        question.includes("spending")
+
+    ) {
+
+        let highestCategory =
+            "None";
+
+
+        let highestAmount = 0;
+
+
+        for (
+            const category in categoryExpenses
+        ) {
+
+            if (
+                categoryExpenses[category] >
+                highestAmount
+            ) {
+
+                highestAmount =
+                    categoryExpenses[category];
+
+
+                highestCategory =
+                    category;
+
+            }
+
+        }
+
+
+        if (highestAmount === 0) {
+
+            answer = `
+
+                <strong>
+                    AI Assistant:
+                </strong>
+
+                <p>
+                    You haven't added any expenses yet.
+                    Add some expenses and I'll help
+                    you understand your spending.
+                </p>
+
+            `;
+
+        }
+        else {
+
+            answer = `
+
+                <strong>
+                    AI Assistant:
+                </strong>
+
+                <p>
+                    Your highest spending category is
+                    <strong>
+                        ${highestCategory}
+                    </strong>
+                    with
+                    <strong>
+                        ₹${highestAmount.toLocaleString("en-IN")}
+                    </strong>.
+                </p>
+
+                <p>
+                    Consider checking this category
+                    to see where you can reduce spending.
+                </p>
+
+            `;
+
+        }
+
+    }
+
+
+    /* Budget Question */
+
+    else if (
+
+        question.includes("budget") ||
+
+        question.includes("within")
+
+    ) {
+
+        if (totalExpenses === 0) {
+
+            answer = `
+
+                <strong>
+                    AI Assistant:
+                </strong>
+
+                <p>
+                    You haven't recorded any expenses yet.
+                    Add your expenses to see how you're
+                    doing against your budget.
+                </p>
+
+            `;
+
+        }
+        else {
+
+            answer = `
+
+                <strong>
+                    AI Assistant:
+                </strong>
+
+                <p>
+                    Your current total expenses are
+                    <strong>
+                        ₹${totalExpenses.toLocaleString("en-IN")}
+                    </strong>.
+                </p>
+
+                <p>
+                    Keep checking your category budgets
+                    regularly so you don't overspend.
+                </p>
+
+            `;
+
+        }
+
+    }
+
+
+    /* Expense Question */
+
+    else if (
+
+        question.includes("expense") ||
+
+        question.includes("expenses")
+
+    ) {
+
+        answer = `
+
+            <strong>
+                AI Assistant:
+            </strong>
+
+            <p>
+                Your total expenses are
+                <strong>
+                    ₹${totalExpenses.toLocaleString("en-IN")}
+                </strong>.
+            </p>
+
+            <p>
+                Review your Expense Breakdown above
+                to see which categories are using
+                most of your money.
+            </p>
+
+        `;
+
+    }
+
+
+    /* General Question */
+
+    else {
+
+        answer = `
+
+            <strong>
+                AI Assistant:
+            </strong>
+
+            <p>
+                I can help you understand your
+                spending, budget, expenses, and savings.
+            </p>
+
+            <p>
+                Try asking:
+                <strong>
+                    "How can I save more money?"
+                </strong>
+            </p>
+
+        `;
+
+    }
+
+
+    response.innerHTML =
+        answer;
+
+}
+
+
+/* Initial Page Setup */
+
+updateBalance();
+
+updateBudget();
 
 updateExpenseChart();
