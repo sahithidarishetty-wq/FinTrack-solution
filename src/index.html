@@ -212,8 +212,7 @@
 
 
             <p class="demo-notice">
-                🔒 Authentication will be connected to the secure
-                backend later.
+                🔒 Your account is protected with secure authentication.
             </p>
 
         </div>
@@ -402,26 +401,32 @@
 
             <h2>Monthly Budget</h2>
 
-            <div class="budget-container">
+            <!-- IMPORTANT:
+                 JavaScript uses id="budgetContainer"
+            -->
 
+            <div
+                id="budgetContainer"
+                class="budget-container"
+            >
 
                 <div class="budget-item">
 
-                    <div class="budget-title">
+                    <div class="budget-header">
 
                         <span>Food</span>
 
-                        <span id="foodBudgetText">
+                        <span>
                             ₹0 / ₹2,000
                         </span>
 
                     </div>
 
-                    <div class="progress">
+                    <div class="budget-bar">
 
                         <div
-                            id="foodProgress"
-                            class="progress-bar"
+                            class="budget-progress"
+                            style="width: 0%"
                         ></div>
 
                     </div>
@@ -429,24 +434,23 @@
                 </div>
 
 
-
                 <div class="budget-item">
 
-                    <div class="budget-title">
+                    <div class="budget-header">
 
                         <span>Transport</span>
 
-                        <span id="transportBudgetText">
+                        <span>
                             ₹0 / ₹1,500
                         </span>
 
                     </div>
 
-                    <div class="progress">
+                    <div class="budget-bar">
 
                         <div
-                            id="transportProgress"
-                            class="progress-bar"
+                            class="budget-progress"
+                            style="width: 0%"
                         ></div>
 
                     </div>
@@ -454,24 +458,23 @@
                 </div>
 
 
-
                 <div class="budget-item">
 
-                    <div class="budget-title">
+                    <div class="budget-header">
 
                         <span>Shopping</span>
 
-                        <span id="shoppingBudgetText">
+                        <span>
                             ₹0 / ₹3,000
                         </span>
 
                     </div>
 
-                    <div class="progress">
+                    <div class="budget-bar">
 
                         <div
-                            id="shoppingProgress"
-                            class="progress-bar"
+                            class="budget-progress"
+                            style="width: 0%"
                         ></div>
 
                     </div>
@@ -479,24 +482,23 @@
                 </div>
 
 
-
                 <div class="budget-item">
 
-                    <div class="budget-title">
+                    <div class="budget-header">
 
                         <span>Bills</span>
 
-                        <span id="billsBudgetText">
+                        <span>
                             ₹0 / ₹2,500
                         </span>
 
                     </div>
 
-                    <div class="progress">
+                    <div class="budget-bar">
 
                         <div
-                            id="billsProgress"
-                            class="progress-bar"
+                            class="budget-progress"
+                            style="width: 0%"
                         ></div>
 
                     </div>
@@ -504,24 +506,23 @@
                 </div>
 
 
-
                 <div class="budget-item">
 
-                    <div class="budget-title">
+                    <div class="budget-header">
 
                         <span>Other</span>
 
-                        <span id="otherBudgetText">
+                        <span>
                             ₹0 / ₹2,000
                         </span>
 
                     </div>
 
-                    <div class="progress">
+                    <div class="budget-bar">
 
                         <div
-                            id="otherProgress"
-                            class="progress-bar"
+                            class="budget-progress"
+                            style="width: 0%"
                         ></div>
 
                     </div>

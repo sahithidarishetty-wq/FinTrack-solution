@@ -11,7 +11,15 @@ const API_BASE_URL = "http://192.168.0.56:5000";
 let totalIncome = 0;
 let totalExpenses = 0;
 
-const budgets = {
+const defaultBudgets = {
+    Food: 2000,
+    Transport: 1500,
+    Shopping: 3000,
+    Bills: 2500,
+    Other: 2000
+};
+
+let budgets = {
     Food: 2000,
     Transport: 1500,
     Shopping: 3000,
@@ -30,6 +38,37 @@ const categoryExpenses = {
 const expenseHistory = [];
 
 // ==========================================
+// NORMALIZE CATEGORY
+// ==========================================
+
+function normalizeCategory(category) {
+    if (!category) {
+        return "Other";
+    }
+
+    const cleanCategory =
+        String(category).trim().toLowerCase();
+
+    if (cleanCategory === "food") {
+        return "Food";
+    }
+
+    if (cleanCategory === "transport") {
+        return "Transport";
+    }
+
+    if (cleanCategory === "shopping") {
+        return "Shopping";
+    }
+
+    if (cleanCategory === "bills") {
+        return "Bills";
+    }
+
+    return "Other";
+}
+
+// ==========================================
 // GET AUTH TOKEN
 // ==========================================
 
@@ -38,12 +77,28 @@ function getToken() {
 }
 
 // ==========================================
+// GET AUTH HEADERS
+// ==========================================
+
+function getAuthHeaders() {
+    const token = getToken();
+
+    return {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    };
+}
+
+// ==========================================
 // SHOW LOGIN
 // ==========================================
 
 function showLogin() {
-    const loginForm = document.getElementById("loginForm");
-    const signupForm = document.getElementById("signupForm");
+    const loginForm =
+        document.getElementById("loginForm");
+
+    const signupForm =
+        document.getElementById("signupForm");
 
     if (loginForm) {
         loginForm.classList.remove("hidden");
@@ -59,8 +114,11 @@ function showLogin() {
 // ==========================================
 
 function showSignup() {
-    const loginForm = document.getElementById("loginForm");
-    const signupForm = document.getElementById("signupForm");
+    const loginForm =
+        document.getElementById("loginForm");
+
+    const signupForm =
+        document.getElementById("signupForm");
 
     if (loginForm) {
         loginForm.classList.add("hidden");
@@ -82,37 +140,47 @@ async function demoLogin() {
     const passwordElement =
         document.getElementById("loginPassword");
 
-    const email = emailElement.value.trim();
-    const password = passwordElement.value;
+    const email =
+        emailElement.value.trim();
+
+    const password =
+        passwordElement.value;
 
     if (!email || !password) {
-        alert("Please enter your email and password.");
+        alert(
+            "Please enter your email and password."
+        );
         return;
     }
 
     try {
-        const response = await fetch(
-            `${API_BASE_URL}/api/auth/login`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    email: email,
-                    password: password
-                })
-            }
-        );
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/auth/login`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password
+                    })
+                }
+            );
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
         if (!response.ok) {
-            alert(data.message || "Invalid username or password.");
+            alert(
+                data.message ||
+                "Invalid username or password."
+            );
             return;
         }
 
-        // Save authentication details
         localStorage.setItem(
             "fintrackToken",
             data.token
@@ -128,7 +196,6 @@ async function demoLogin() {
             data.name
         );
 
-        // Show application
         document
             .getElementById("authPage")
             .classList.add("hidden");
@@ -138,7 +205,9 @@ async function demoLogin() {
             .classList.remove("hidden");
 
         const welcomeText =
-            document.getElementById("welcomeText");
+            document.getElementById(
+                "welcomeText"
+            );
 
         if (welcomeText) {
             welcomeText.textContent =
@@ -147,11 +216,13 @@ async function demoLogin() {
 
         alert("Login successful!");
 
-        // Load user's saved data from MySQL
         await loadFinancialData();
 
     } catch (error) {
-        console.error("Login error:", error);
+        console.error(
+            "Login error:",
+            error
+        );
 
         alert(
             "Cannot connect to the FinTrack server.\n\n" +
@@ -172,18 +243,33 @@ async function demoSignup() {
         document.getElementById("signupEmail");
 
     const passwordElement =
-        document.getElementById("signupPassword");
+        document.getElementById(
+            "signupPassword"
+        );
 
     const confirmPasswordElement =
-        document.getElementById("confirmPassword");
+        document.getElementById(
+            "confirmPassword"
+        );
 
-    const name = nameElement.value.trim();
-    const email = emailElement.value.trim();
-    const password = passwordElement.value;
+    const name =
+        nameElement.value.trim();
+
+    const email =
+        emailElement.value.trim();
+
+    const password =
+        passwordElement.value;
+
     const confirmPassword =
         confirmPasswordElement.value;
 
-    if (!name || !email || !password || !confirmPassword) {
+    if (
+        !name ||
+        !email ||
+        !password ||
+        !confirmPassword
+    ) {
         alert("Please fill in all fields.");
         return;
     }
@@ -194,30 +280,38 @@ async function demoSignup() {
     }
 
     if (password.length < 6) {
-        alert("Password must contain at least 6 characters.");
+        alert(
+            "Password must contain at least 6 characters."
+        );
         return;
     }
 
     try {
-        const response = await fetch(
-            `${API_BASE_URL}/api/auth/register`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    name: name,
-                    email: email,
-                    password: password
-                })
-            }
-        );
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/auth/register`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        email: email,
+                        password: password
+                    })
+                }
+            );
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
         if (!response.ok) {
-            alert(data.message || "Registration failed.");
+            alert(
+                data.message ||
+                "Registration failed."
+            );
             return;
         }
 
@@ -234,7 +328,10 @@ async function demoSignup() {
         showLogin();
 
     } catch (error) {
-        console.error("Signup error:", error);
+        console.error(
+            "Signup error:",
+            error
+        );
 
         alert(
             "Cannot connect to the FinTrack server."
@@ -250,6 +347,10 @@ function togglePassword(inputId, button) {
     const input =
         document.getElementById(inputId);
 
+    if (!input) {
+        return;
+    }
+
     if (input.type === "password") {
         input.type = "text";
         button.textContent = "🙈";
@@ -264,9 +365,17 @@ function togglePassword(inputId, button) {
 // ==========================================
 
 function logout() {
-    localStorage.removeItem("fintrackToken");
-    localStorage.removeItem("fintrackUserId");
-    localStorage.removeItem("fintrackUserName");
+    localStorage.removeItem(
+        "fintrackToken"
+    );
+
+    localStorage.removeItem(
+        "fintrackUserId"
+    );
+
+    localStorage.removeItem(
+        "fintrackUserName"
+    );
 
     totalIncome = 0;
     totalExpenses = 0;
@@ -274,6 +383,13 @@ function logout() {
     Object.keys(categoryExpenses).forEach(
         function(category) {
             categoryExpenses[category] = 0;
+        }
+    );
+
+    Object.keys(defaultBudgets).forEach(
+        function(category) {
+            budgets[category] =
+                defaultBudgets[category];
         }
     );
 
@@ -288,10 +404,16 @@ function logout() {
         .classList.remove("hidden");
 
     showLogin();
+
+    updateDashboard();
+    updateBudget();
+    updateExpenseChart();
+    updateRecentExpenses();
+    updateFinancialWarnings();
 }
 
 // ==========================================
-// LOAD ALL FINANCIAL DATA FROM BACKEND
+// LOAD ALL FINANCIAL DATA
 // ==========================================
 
 async function loadFinancialData() {
@@ -303,17 +425,27 @@ async function loadFinancialData() {
 
     try {
         const headers = {
-            "Authorization": `Bearer ${token}`
+            "Authorization":
+                `Bearer ${token}`
         };
 
-        // Get income
-        const incomeResponse = await fetch(
-            `${API_BASE_URL}/api/income`,
-            {
-                method: "GET",
-                headers: headers
-            }
-        );
+        // ======================================
+        // 1. GET INCOME
+        // ======================================
+
+        const incomeResponse =
+            await fetch(
+                `${API_BASE_URL}/api/income`,
+                {
+                    method: "GET",
+                    headers: headers
+                }
+            );
+
+        if (incomeResponse.status === 401) {
+            logout();
+            return;
+        }
 
         if (incomeResponse.ok) {
             const incomeData =
@@ -321,21 +453,38 @@ async function loadFinancialData() {
 
             totalIncome = 0;
 
-            incomeData.income.forEach(
-                function(item) {
-                    totalIncome += Number(item.amount);
-                }
-            );
+            if (
+                incomeData.income &&
+                Array.isArray(
+                    incomeData.income
+                )
+            ) {
+                incomeData.income.forEach(
+                    function(item) {
+                        totalIncome +=
+                            Number(item.amount) || 0;
+                    }
+                );
+            }
         }
 
-        // Get expenses
-        const expenseResponse = await fetch(
-            `${API_BASE_URL}/api/expenses`,
-            {
-                method: "GET",
-                headers: headers
-            }
-        );
+        // ======================================
+        // 2. GET EXPENSES
+        // ======================================
+
+        const expenseResponse =
+            await fetch(
+                `${API_BASE_URL}/api/expenses`,
+                {
+                    method: "GET",
+                    headers: headers
+                }
+            );
+
+        if (expenseResponse.status === 401) {
+            logout();
+            return;
+        }
 
         if (expenseResponse.ok) {
             const expenseData =
@@ -343,7 +492,9 @@ async function loadFinancialData() {
 
             totalExpenses = 0;
 
-            Object.keys(categoryExpenses).forEach(
+            Object.keys(
+                categoryExpenses
+            ).forEach(
                 function(category) {
                     categoryExpenses[category] = 0;
                 }
@@ -351,36 +502,56 @@ async function loadFinancialData() {
 
             expenseHistory.length = 0;
 
-            expenseData.expenses.forEach(
-                function(item) {
+            if (
+                expenseData.expenses &&
+                Array.isArray(
+                    expenseData.expenses
+                )
+            ) {
+                expenseData.expenses.forEach(
+                    function(item) {
 
-                    const amount = Number(item.amount);
+                        const amount =
+                            Number(item.amount) || 0;
 
-                    totalExpenses += amount;
+                        totalExpenses += amount;
 
-                    const category =
-                        item.category || "Other";
+                        const category =
+                            normalizeCategory(
+                                item.category
+                            );
 
-                    if (
-                        Object.prototype.hasOwnProperty.call(
-                            categoryExpenses,
+                        categoryExpenses[
                             category
-                        )
-                    ) {
-                        categoryExpenses[category] += amount;
-                    } else {
-                        categoryExpenses.Other += amount;
-                    }
+                        ] += amount;
 
-                    expenseHistory.push({
-                        name: item.name,
-                        category: category,
-                        amount: amount,
-                        date: item.date
-                    });
-                }
-            );
+                        expenseHistory.push({
+                            id: item.id,
+                            name: item.name,
+                            category: category,
+                            amount: amount,
+                            date: item.date
+                        });
+                    }
+                );
+            }
         }
+
+        // ======================================
+        // 3. GET DASHBOARD
+        // ======================================
+
+        await loadDashboard();
+
+        // ======================================
+        // 4. GET BUDGETS
+        // ======================================
+
+        await loadBudgets();
+
+        // ======================================
+        // 5. UPDATE UI
+        // ======================================
 
         updateDashboard();
         updateBudget();
@@ -397,21 +568,175 @@ async function loadFinancialData() {
 }
 
 // ==========================================
-// ADD INCOME - BACKEND
+// LOAD DASHBOARD FROM BACKEND
+// ==========================================
+
+async function loadDashboard() {
+    const token = getToken();
+
+    if (!token) {
+        return;
+    }
+
+    try {
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/dashboard`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization":
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+        if (response.status === 401) {
+            logout();
+            return;
+        }
+
+        if (!response.ok) {
+            console.error(
+                "Dashboard API error:",
+                response.status
+            );
+            return;
+        }
+
+        const data =
+            await response.json();
+
+        totalIncome =
+            Number(data.totalIncome) || 0;
+
+        totalExpenses =
+            Number(data.totalExpenses) || 0;
+
+    } catch (error) {
+        console.error(
+            "Dashboard loading error:",
+            error
+        );
+    }
+}
+
+// ==========================================
+// LOAD BUDGETS FROM BACKEND
+// ==========================================
+
+async function loadBudgets() {
+    const token = getToken();
+
+    if (!token) {
+        return;
+    }
+
+    try {
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/budgets`,
+                {
+                    method: "GET",
+                    headers: {
+                        "Authorization":
+                            `Bearer ${token}`
+                    }
+                }
+            );
+
+        if (response.status === 401) {
+            logout();
+            return;
+        }
+
+        if (!response.ok) {
+            console.error(
+                "Budget API error:",
+                response.status
+            );
+            return;
+        }
+
+        const data =
+            await response.json();
+
+        Object.keys(defaultBudgets).forEach(
+            function(category) {
+                budgets[category] =
+                    defaultBudgets[category];
+            }
+        );
+
+        if (
+            !data.budgets ||
+            !Array.isArray(data.budgets)
+        ) {
+            return;
+        }
+
+        const currentMonth =
+            new Date()
+                .toISOString()
+                .slice(0, 7);
+
+        data.budgets.forEach(
+            function(item) {
+
+                const category =
+                    normalizeCategory(
+                        item.category
+                    );
+
+                const amount =
+                    Number(item.amount) || 0;
+
+                const month =
+                    String(item.month || "");
+
+                if (
+                    Object.prototype.hasOwnProperty.call(
+                        budgets,
+                        category
+                    ) &&
+                    amount > 0 &&
+                    month === currentMonth
+                ) {
+                    budgets[category] =
+                        amount;
+                }
+            }
+        );
+
+    } catch (error) {
+        console.error(
+            "Budget loading error:",
+            error
+        );
+    }
+}
+
+// ==========================================
+// ADD INCOME
 // ==========================================
 
 async function addIncome() {
     const incomeInput =
-        document.getElementById("incomeAmount");
+        document.getElementById(
+            "incomeAmount"
+        );
 
     if (!incomeInput) {
         return;
     }
 
-    const amount = Number(incomeInput.value);
+    const amount =
+        Number(incomeInput.value);
 
     if (!amount || amount <= 0) {
-        alert("Please enter a valid income amount.");
+        alert(
+            "Please enter a valid income amount."
+        );
         return;
     }
 
@@ -422,28 +747,33 @@ async function addIncome() {
         return;
     }
 
-    // Today's date
     const today =
-        new Date().toISOString().split("T")[0];
+        new Date()
+            .toISOString()
+            .split("T")[0];
 
     try {
-        const response = await fetch(
-            `${API_BASE_URL}/api/income`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    source: "Income",
-                    amount: amount,
-                    date: today
-                })
-            }
-        );
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/income`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                        "Authorization":
+                            `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        source: "Income",
+                        amount: amount,
+                        date: today
+                    })
+                }
+            );
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
         if (!response.ok) {
             alert(
@@ -455,7 +785,6 @@ async function addIncome() {
 
         incomeInput.value = "";
 
-        // Reload data from MySQL
         await loadFinancialData();
 
         alert(
@@ -475,17 +804,24 @@ async function addIncome() {
 }
 
 // ==========================================
-// ADD EXPENSE - BACKEND
+// ADD EXPENSE
 // ==========================================
 
 async function addExpense() {
     const expenseInput =
-        document.getElementById("expenseAmount");
+        document.getElementById(
+            "expenseAmount"
+        );
 
     const categoryInput =
-        document.getElementById("expenseCategory");
+        document.getElementById(
+            "expenseCategory"
+        );
 
-    if (!expenseInput || !categoryInput) {
+    if (
+        !expenseInput ||
+        !categoryInput
+    ) {
         return;
     }
 
@@ -493,15 +829,21 @@ async function addExpense() {
         Number(expenseInput.value);
 
     const category =
-        categoryInput.value;
+        normalizeCategory(
+            categoryInput.value
+        );
 
     if (!amount || amount <= 0) {
-        alert("Please enter a valid expense amount.");
+        alert(
+            "Please enter a valid expense amount."
+        );
         return;
     }
 
-    if (!category) {
-        alert("Please select an expense category.");
+    if (!categoryInput.value) {
+        alert(
+            "Please select an expense category."
+        );
         return;
     }
 
@@ -513,27 +855,33 @@ async function addExpense() {
     }
 
     const today =
-        new Date().toISOString().split("T")[0];
+        new Date()
+            .toISOString()
+            .split("T")[0];
 
     try {
-        const response = await fetch(
-            `${API_BASE_URL}/api/expenses`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    name: category,
-                    amount: amount,
-                    category: category,
-                    date: today
-                })
-            }
-        );
+        const response =
+            await fetch(
+                `${API_BASE_URL}/api/expenses`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+                        "Authorization":
+                            `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        name: category,
+                        amount: amount,
+                        category: category,
+                        date: today
+                    })
+                }
+            );
 
-        const data = await response.json();
+        const data =
+            await response.json();
 
         if (!response.ok) {
             alert(
@@ -569,13 +917,19 @@ async function addExpense() {
 
 function updateDashboard() {
     const incomeElement =
-        document.getElementById("totalIncome");
+        document.getElementById(
+            "totalIncome"
+        );
 
     const expensesElement =
-        document.getElementById("totalExpenses");
+        document.getElementById(
+            "totalExpenses"
+        );
 
     const balanceElement =
-        document.getElementById("balance");
+        document.getElementById(
+            "balance"
+        );
 
     if (incomeElement) {
         incomeElement.textContent =
@@ -602,9 +956,14 @@ function updateDashboard() {
 
 function updateBudget() {
     const budgetContainer =
-        document.getElementById("budgetContainer");
+        document.getElementById(
+            "budgetContainer"
+        );
 
     if (!budgetContainer) {
+        console.warn(
+            "budgetContainer not found in HTML."
+        );
         return;
     }
 
@@ -614,10 +973,16 @@ function updateBudget() {
         function(category) {
 
             const budget =
-                budgets[category];
+                Number(
+                    budgets[category]
+                ) || 0;
 
             const spent =
-                categoryExpenses[category];
+                Number(
+                    categoryExpenses[
+                        category
+                    ]
+                ) || 0;
 
             const percentage =
                 budget > 0
@@ -628,7 +993,9 @@ function updateBudget() {
                     : 0;
 
             const budgetItem =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             budgetItem.className =
                 "budget-item";
@@ -665,9 +1032,14 @@ function updateBudget() {
 
 function updateExpenseChart() {
     const chartContainer =
-        document.getElementById("expenseChart");
+        document.getElementById(
+            "expenseChart"
+        );
 
     if (!chartContainer) {
+        console.warn(
+            "expenseChart not found in HTML."
+        );
         return;
     }
 
@@ -677,11 +1049,11 @@ function updateExpenseChart() {
         function(category) {
 
             const amount =
-                categoryExpenses[category];
-
-            if (amount === 0) {
-                return;
-            }
+                Number(
+                    categoryExpenses[
+                        category
+                    ]
+                ) || 0;
 
             const percentage =
                 totalExpenses > 0
@@ -689,7 +1061,9 @@ function updateExpenseChart() {
                     : 0;
 
             const chartItem =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             chartItem.className =
                 "chart-item";
@@ -716,11 +1090,6 @@ function updateExpenseChart() {
             );
         }
     );
-
-    if (totalExpenses === 0) {
-        chartContainer.innerHTML =
-            "<p>No expenses added yet.</p>";
-    }
 }
 
 // ==========================================
@@ -729,7 +1098,9 @@ function updateExpenseChart() {
 
 function updateRecentExpenses() {
     const recentExpenses =
-        document.getElementById("recentExpenses");
+        document.getElementById(
+            "recentExpenses"
+        );
 
     if (!recentExpenses) {
         return;
@@ -745,15 +1116,15 @@ function updateRecentExpenses() {
     }
 
     const recent =
-        expenseHistory
-            .slice(-5)
-            .reverse();
+        expenseHistory.slice(0, 5);
 
     recent.forEach(
         function(expense) {
 
             const item =
-                document.createElement("div");
+                document.createElement(
+                    "div"
+                );
 
             item.className =
                 "recent-expense";
@@ -774,7 +1145,9 @@ function updateRecentExpenses() {
                 </strong>
             `;
 
-            recentExpenses.appendChild(item);
+            recentExpenses.appendChild(
+                item
+            );
         }
     );
 }
@@ -837,12 +1210,21 @@ function updateFinancialWarnings() {
         function(category) {
 
             const spent =
-                categoryExpenses[category];
+                Number(
+                    categoryExpenses[
+                        category
+                    ]
+                ) || 0;
 
             const budget =
-                budgets[category];
+                Number(
+                    budgets[category]
+                ) || 0;
 
-            if (spent >= budget) {
+            if (
+                budget > 0 &&
+                spent >= budget
+            ) {
                 warningContainer.innerHTML += `
                     <div class="warning-card danger">
                         🚨 <strong>
@@ -889,7 +1271,9 @@ function updateFinancialWarnings() {
 
 function useQuestion(question) {
     const aiInput =
-        document.getElementById("aiQuestion");
+        document.getElementById(
+            "aiQuestion"
+        );
 
     if (!aiInput) {
         return;
@@ -906,20 +1290,31 @@ function useQuestion(question) {
 
 function askAI() {
     const aiInput =
-        document.getElementById("aiQuestion");
+        document.getElementById(
+            "aiQuestion"
+        );
 
     const aiResponse =
-        document.getElementById("aiResponse");
+        document.getElementById(
+            "aiResponse"
+        );
 
-    if (!aiInput || !aiResponse) {
+    if (
+        !aiInput ||
+        !aiResponse
+    ) {
         return;
     }
 
     const question =
-        aiInput.value.trim().toLowerCase();
+        aiInput.value
+            .trim()
+            .toLowerCase();
 
     if (!question) {
-        alert("Please enter a question.");
+        alert(
+            "Please enter a question."
+        );
         return;
     }
 
@@ -952,18 +1347,25 @@ function askAI() {
         question.includes("highest") ||
         question.includes("where")
     ) {
-        let highestCategory = "None";
+        let highestCategory =
+            "None";
+
         let highestAmount = 0;
 
-        Object.keys(categoryExpenses).forEach(
+        Object.keys(
+            categoryExpenses
+        ).forEach(
             function(category) {
 
                 if (
-                    categoryExpenses[category] >
-                    highestAmount
+                    categoryExpenses[
+                        category
+                    ] > highestAmount
                 ) {
                     highestAmount =
-                        categoryExpenses[category];
+                        categoryExpenses[
+                            category
+                        ];
 
                     highestCategory =
                         category;
@@ -994,7 +1396,8 @@ function askAI() {
         question.includes("within")
     ) {
         const balance =
-            totalIncome - totalExpenses;
+            totalIncome -
+            totalExpenses;
 
         answer = `
             📋 <strong>Your current financial status:</strong>
@@ -1054,7 +1457,8 @@ function askAI() {
         question.includes("remaining")
     ) {
         const balance =
-            totalIncome - totalExpenses;
+            totalIncome -
+            totalExpenses;
 
         answer = `
             💰 Your available balance is:
@@ -1085,7 +1489,8 @@ function askAI() {
         `;
     }
 
-    aiResponse.innerHTML = answer;
+    aiResponse.innerHTML =
+        answer;
 }
 
 // ==========================================
@@ -1102,19 +1507,27 @@ document.addEventListener(
             );
 
         const authPage =
-            document.getElementById("authPage");
+            document.getElementById(
+                "authPage"
+            );
 
         const mainApp =
-            document.getElementById("mainApp");
+            document.getElementById(
+                "mainApp"
+            );
 
         if (token) {
 
             if (authPage) {
-                authPage.classList.add("hidden");
+                authPage.classList.add(
+                    "hidden"
+                );
             }
 
             if (mainApp) {
-                mainApp.classList.remove("hidden");
+                mainApp.classList.remove(
+                    "hidden"
+                );
             }
 
             const userName =
@@ -1127,22 +1540,28 @@ document.addEventListener(
                     "welcomeText"
                 );
 
-            if (welcomeText && userName) {
+            if (
+                welcomeText &&
+                userName
+            ) {
                 welcomeText.textContent =
                     `Welcome back, ${userName}!`;
             }
 
-            // Load saved data
             await loadFinancialData();
 
         } else {
 
             if (authPage) {
-                authPage.classList.remove("hidden");
+                authPage.classList.remove(
+                    "hidden"
+                );
             }
 
             if (mainApp) {
-                mainApp.classList.add("hidden");
+                mainApp.classList.add(
+                    "hidden"
+                );
             }
 
             updateDashboard();
